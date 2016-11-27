@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="base :: deochead"></head>
 <body>
 
 <form method="post">
 	<label>
-		Name: <input type="text" name="name" required/>
+		Name: <input type="text" name="name" required="required"/>
 	</label>
 	<label>
-		Price: <input type="number" name="price" required/>
+		Price: <input type="number" name="price" required="required" value="0"/>
 	</label>
+	<label>per Unit<input type="checkbox" name="meas" value="unit"/></label>
+	<label>per Pound<input type="checkbox" name="meas" value="lb"/></label>
 	<label>
-		PLU: <input type="number" name="plu"/>
+		PLU: <input type="number" name="plu" value="0"/>
 	</label>
+	<br></br>
 	<label>
-		Weight: <input type="number" name="wt" required/>
+		Weight: <input type="number" name="wt" value="0"/>
 	</label>
-	<br>
 		Foodstamps eligible?: 
 		<label>Yes<input type="checkbox" name="fs" value="y"/></label>
 		<label>No<input type="checkbox" name="fs" value="n"/></label>
 	<button type="submit">Submit</button>
 </form>
-
 </body>
+<footer th:replace="base :: docfoot"></footer>
 </html>
