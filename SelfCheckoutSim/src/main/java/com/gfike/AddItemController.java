@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-public abstract class AddItemController{
+public class AddItemController{
 	@Autowired
 	private ItemDao itemDao;
 	

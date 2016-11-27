@@ -1,10 +1,5 @@
 package com.gfike;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 //what's in the db
 import javax.persistence.Column;
