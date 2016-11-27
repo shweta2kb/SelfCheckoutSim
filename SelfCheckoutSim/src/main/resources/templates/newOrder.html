@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="base :: deochead"></head>
+
+<body>
+<form method="post">
+<label>Type in the name of the item you wish to add: <input type="text" value="name" required="required"></label>
+<button type="submit">Add Item to Cart</button>
+</form>
+
+Current Cart:
+
+<table>
+<tr th:each="product :${cart}"></tr>
+</table>
+<!--TODO   add buttons to save or clear cart, also need to make view orders and carts-->
+<button type="submit"></button>lk,,
+</body>
+
+<footer th:replace="base :: docfoot"></footer>
+</html>
