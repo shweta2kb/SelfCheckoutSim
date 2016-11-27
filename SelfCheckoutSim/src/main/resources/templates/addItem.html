@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<body>
+
+<form method="post">
+	<label>
+		Name: <input type="text" name="name" required/>
+	</label>
+	<label>
+		Price: <input type="number" name="price" required/>
+	</label>
+	<label>
+		PLU: <input type="number" name="plu"/>
+	</label>
+	<label>
+		Weight: <input type="number" name="wt" required/>
+	</label>
+	<br>
+		Foodstamps eligible?: 
+		<label>Yes<input type="checkbox" name="fs" value="y"/></label>
+		<label>No<input type="checkbox" name="fs" value="n"/></label>
+	<button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
