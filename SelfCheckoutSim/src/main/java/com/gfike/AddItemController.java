@@ -19,20 +19,35 @@ public abstract class AddItemController{
 		return "addItem";
 	}
 	
-	@RequestMapping(value = "/addItem", method = RequestMethod.POST)
+@RequestMapping(value = "/addItem", method = RequestMethod.POST)
 	public String addItem(HttpServletRequest request, Model model) {
 		String name = request.getParameter("name");
 		int price = Integer.parseInt(request.getParameter("price"));
 		int plu = Integer.parseInt(request.getParameter("plu"));
 		int wt = Integer.parseInt(request.getParameter("wt"));
 		String fs = request.getParameter("fs");
+		String meas = request.getParameter("meas");
 		
 		if (plu == 0) {
-			plu = Item.makePlu(name);
+
+			plu += Item.makePlu(name);
 		}
+		Item i = new Item();
+		if (wt == 0 ){
+		i = new Item(name, price, plu, fs, meas);
+		}
+		i = new Item(name, price, plu,wt, fs, meas);
 		
-		Item i = new Item(name,price,plu,wt,fs);
-		itemDao.save(i);
+		if (i.equals(itemDao.findByPlu(plu))) {
+			String error = "This item has already been added \n";
+			model.addAttribute("error", error);
+			return "addItem";
+		}
+		else {
+			itemDao.save(i);
+			String msg = "Item has been succesfully added! \n";
+			model.addAttribute("msg", msg);
+		}
 		return "addItem";
 	}
 }
