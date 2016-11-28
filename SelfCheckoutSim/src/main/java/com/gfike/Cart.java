@@ -2,11 +2,25 @@ package com.gfike;
 
 import java.util.ArrayList;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+@Entity
+@Table(name="Cart")
 public class Cart {
 	ArrayList<Product> lst = new ArrayList<Product>();
 	
 	public Cart () {}
 	
+	@Column(name="lst")
+	public ArrayList<Product> getLst() {
+		return lst;
+	}
+
+	public void setLst(ArrayList<Product> lst) {
+		this.lst = lst;
+	}
+
 	public void addProduct(Product p) {
 		lst.add(p);
 	}

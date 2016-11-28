@@ -12,12 +12,13 @@ public class OrderController {
 
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (){
+		
 		return "newOrder";
 	}
 	
 	@RequestMapping(value="/newOrder",method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
-		return null;
+		return "newOrder";
 		
 	}
 }
