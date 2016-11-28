@@ -5,10 +5,10 @@
 <body>
 
 Type in the name of the item you wish to add:
-<form>
+<form action="AddItem">
 <input list="products">
 <datalist id="products" th:each="product :${list}">
-<option th:value="${"
+<option th:value="${product.getName()}">
 </datalist>
 <button type="submit">Add Item to Cart</button>
 </form>
