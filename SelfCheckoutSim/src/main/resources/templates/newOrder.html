@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="base :: deochead"></head>
-
+<nav th:replace="base :: nav"></nav>
 <body>
 
 Type in the name of the item you wish to add:
-<form action="AddI>
+<form action="AddItem">
 <input list="products">
 <datalist id="products" th:each="product :${list}">
 <option th:value="${product.getName()}">
 </datalist>
-<button type="submit" onclick="pageAction('AddItem')">Add Item to Cart</button>
+<button>Add Item to Cart</button>
 </form>
 
 
@@ -21,13 +21,12 @@ Current Cart:
 <td th:text="${product.getName()}"></td>
 </tr>
 </table>
+
 <br></br>
-<button type="submit" name="checkout">Checkout</button>
-
-
-<form action="link" action="viewOrders.html" method="get">
-<button>View Past Orders</button> 
+<form action="checkout">
+<button>Checkout</button>
 </form>
+
 </body>
 
 <footer th:replace="base :: docfoot"></footer>

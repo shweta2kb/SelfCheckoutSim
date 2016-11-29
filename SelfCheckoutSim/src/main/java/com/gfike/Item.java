@@ -96,6 +96,8 @@ public class Item {
 	public static int makePlu (String name) {
 		int plu = 0;
 		for (int i = 0; i < 11; i++) {
+			
+			//for loop inside of for loop?
 			char c = name.charAt(i);
 			int ascii = (int) c;
 			plu += ascii;
@@ -104,7 +106,7 @@ public class Item {
 		return plu;
 	}
 	
-	@Column(name="UnitofMeasure")
+	@Column(name="UnitOfMeasure")
 	@NotNull
 	public String getMeas() {
 		return meas;

@@ -4,13 +4,25 @@ import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="Cart")
 public class Cart {
 	ArrayList<Product> lst = new ArrayList<Product>();
+	private int uid;
 	
 	public Cart () {}
+	
+	@Id
+    @GeneratedValue
+    @NotNull
+    @Column(name = "uid", unique = true)
+	public int getUid() {
+		return this.uid;
+	}
 	
 	@Column(name="lst")
 	public ArrayList<Product> getLst() {

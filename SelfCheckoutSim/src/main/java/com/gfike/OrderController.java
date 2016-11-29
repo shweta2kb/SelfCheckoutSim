@@ -12,7 +12,7 @@ public class OrderController {
 
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (){
-		
+		ArrayList <String> lst = 
 		return "newOrder";
 	}
 	
