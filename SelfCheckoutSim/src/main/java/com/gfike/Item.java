@@ -17,6 +17,7 @@ public class Item {
 	private int wt;
 	private String fs;
 	private String meas;
+	private int barcode;
 	
 	public Item(String name, int price, int plu, String fs, String meas) {
 		this.name = name;
@@ -152,6 +153,21 @@ public class Item {
 	
 	public String toString(){
 		return this.name + " " + this.plu + " " + this.price + " per " + this.meas + " " + this.fs;
+	}
+	
+	public int getBarcode() {
+		return barcode;
+	}
+	
+	public void setBarcode(boolean choice) {
+		barcode = 0;
+		if (choice) {
+			barcode += this.plu;
+			this.barcode = barcode;
+		}
+		else {
+			this.barcode = barcode;
+		}
 	}
 	
 }
