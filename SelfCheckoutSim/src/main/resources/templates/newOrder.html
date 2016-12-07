@@ -6,9 +6,9 @@
 
 Type in the name of the item you wish to add:
 <form action="AddItem">
-<input list="products">
-<datalist id="products" th:each="product :${list}">
-<option th:value="${product.getName()}">
+<input list="items">
+<datalist id="items" th:each="item :${list}">
+<option th:value="${item}">
 </datalist>
 <button>Add Item to Cart</button>
 </form>
@@ -17,8 +17,8 @@ Type in the name of the item you wish to add:
 Current Cart:
 
 <table>
-<tr th:each="product :${cart}">
-<td th:text="${product.getName()}"></td>
+<tr th:each="item :${cart}">
+<td th:text="${item.getName()}"></td>
 </tr>
 </table>
 

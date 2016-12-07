@@ -169,5 +169,17 @@ public class Item {
 			this.barcode = barcode;
 		}
 	}
+
+
+	public double getlTax() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public double gethTax() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

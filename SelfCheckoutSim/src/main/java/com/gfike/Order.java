@@ -15,7 +15,7 @@ public class Order {
 	private double total;
 	private double lTax;
 	private double hTax;
-	ArrayList<Product> lst = new ArrayList<Product>();
+	ArrayList<Item> lst = new ArrayList<Item>();
 	private int uid;
 	
 	public Order () {
@@ -32,7 +32,7 @@ public class Order {
 	@Column(name="Total")
 	public double getTotal() {
 		total = 0.0;
-		for(Product p : lst) {
+		for(Item p : lst) {
 			total += p.getPrice();
 		}
 		total /= 100;
@@ -42,7 +42,7 @@ public class Order {
 	@Column(name="LowTax")
 	public double getlTax() {
 		lTax = 0.0;
-		for(Product p : lst) {
+		for(Item p : lst) {
 			lTax += p.getlTax();
 		}
 		lTax /= 100;
@@ -52,18 +52,18 @@ public class Order {
 	@Column(name="HighTax")
 	public double gethTax() {
 		hTax = 0.0;
-		for(Product p : lst) {
+		for(Item p : lst) {
 			hTax += p.gethTax();
 		}
 		hTax /= 100;
 		return hTax;
 	}
 	
-	public ArrayList<Product> getLst() {
+	public ArrayList<Item> getLst() {
 		return lst;
 	}
 
-	public void setLst(ArrayList<Product> lst) {
+	public void setLst(ArrayList<Item> lst) {
 		this.lst = lst;
 	}
 
@@ -83,15 +83,15 @@ public class Order {
 		this.uid = uid;
 	}
 	
-	public void addProduct(Product p) {
+	public void additem(Item p) {
 		lst.add(p);
 	}
 	
-	public void removeProduct(Product p) {
+	public void removeitem(Item p) {
 		lst.remove(p);
 	}
 	
-	public void addMultiples(int num, Product p){
+	public void addMultiples(int num, Item p){
 		for(int i = 0; i < num -1; i ++) {
 			lst.add(p);
 		}
