@@ -119,37 +119,6 @@ public class Item {
 	}
 
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + plu;
-		result = prime * result + price;
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Item))
-			return false;
-		Item other = (Item) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (plu != other.plu)
-			return false;
-		if (price != other.price)
-			return false;
-		return true;
-	}
 	
 	public String toString(){
 		return this.name + " " + this.plu + " " + this.price + " per " + this.meas + " " + this.fs;

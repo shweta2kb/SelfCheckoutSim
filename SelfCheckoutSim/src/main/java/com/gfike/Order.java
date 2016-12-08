@@ -83,17 +83,17 @@ public class Order {
 		this.uid = uid;
 	}
 	
-	public void additem(Item p) {
-		lst.add(p);
+	public void additem(Item i) {
+		lst.add(i);
 	}
 	
-	public void removeitem(Item p) {
-		lst.remove(p);
+	public void removeitem(Item i) {
+		lst.remove(i);
 	}
 	
-	public void addMultiples(int num, Item p){
-		for(int i = 0; i < num -1; i ++) {
-			lst.add(p);
+	public void addMultiples(int num, Item i){
+		for(int j = 0; j < num -1; j ++) {
+			lst.add(i);
 		}
 	}
 }
