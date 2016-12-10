@@ -10,16 +10,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name= "Order")
+@Table(name="Order")
 public class Order {
-	private double total;
-	private double lTax;
-	private double hTax;
-	ArrayList<Item> lst = new ArrayList<Item>();
+
+	private float total;
+	private float total_hTax;
+	private float total_lTax;
+	ArrayList<Item> list = new ArrayList<Item>();
 	private int uid;
 	
-	public Order () {
-	}
+	Order () {}
 	
 	@Id
     @GeneratedValue
@@ -29,71 +29,46 @@ public class Order {
 		return this.uid;
 	}
 	
-	@Column(name="Total")
-	public double getTotal() {
-		total = 0.0;
-		for(Item p : lst) {
-			total += p.getPrice();
-		}
-		total /= 100;
+	protected void setUid(int uid) {
+        this.uid = uid;
+    }
+	
+	@Column(name="total")
+	@NotNull
+	public float getTotal() {
 		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
+	
+	@Column(name="HighTax")
+	public float getTotal_hTax() {
+		return total_hTax;
+	}
+
+	public void setTotal_hTax(float total_hTax) {
+		this.total_hTax = total_hTax;
 	}
 	
 	@Column(name="LowTax")
-	public double getlTax() {
-		lTax = 0.0;
-		for(Item p : lst) {
-			lTax += p.getlTax();
-		}
-		lTax /= 100;
-		return lTax;
+	public float getTotal_lTax() {
+		return total_lTax;
 	}
 
-	@Column(name="HighTax")
-	public double gethTax() {
-		hTax = 0.0;
-		for(Item p : lst) {
-			hTax += p.gethTax();
-		}
-		hTax /= 100;
-		return hTax;
+	public void setTotal_lTax(float total_lTax) {
+		this.total_lTax = total_lTax;
 	}
 	
-	public ArrayList<Item> getLst() {
-		return lst;
+	@Column(name="items")
+	public ArrayList<Item> getList() {
+		return list;
 	}
 
-	public void setLst(ArrayList<Item> lst) {
-		this.lst = lst;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	public void setlTax(double lTax) {
-		this.lTax = lTax;
-	}
-
-	public void sethTax(double hTax) {
-		this.hTax = hTax;
-	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
+	public void setList(ArrayList<Item> list) {
+		this.list = list;
 	}
 	
-	public void additem(Item i) {
-		lst.add(i);
-	}
 	
-	public void removeitem(Item i) {
-		lst.remove(i);
-	}
-	
-	public void addMultiples(int num, Item i){
-		for(int j = 0; j < num -1; j ++) {
-			lst.add(i);
-		}
-	}
 }

@@ -5,7 +5,7 @@
 
 <form method="post">
 	<label>
-		Name: <input type="text" name="name" required="required"/>
+		Name: <input type="text" name="name" required="required" th:value="${name}"/>
 	</label>
 	<label>
 		Price: <input type="number" name="price" required="required" value="0"/>
@@ -13,7 +13,8 @@
 	<label>per Unit<input type="checkbox" name="meas" value="unit"/></label>
 	<label>per Pound<input type="checkbox" name="meas" value="lb"/></label>
 	<label>
-		PLU: <input type="number" name="plu" value="0"/>
+		PLU: <input type="number" name="plu" value="0" th:value="${plu}"/>
+		<span th:text="${plu}"></span>
 	</label>
 	<br></br>
 	<label>
@@ -24,6 +25,8 @@
 		<label>No<input type="checkbox" name="fs" value="n"/></label>
 	<button type="submit">Submit</button>
 </form>
+
 </body>
+
 <footer th:replace="base :: docfoot"></footer>
 </html>

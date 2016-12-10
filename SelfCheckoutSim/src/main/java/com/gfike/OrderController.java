@@ -19,7 +19,7 @@ public class OrderController {
 	public String newOrder (Model model){
 		Scanner s = null;
 		try {
-			//path name will change on which computer is being used
+			//file pathname on Surface: "C:\\Users\\aerot\\coding\\git-items\\SelfCheckoutSim\\grocery-items.txt"
 			s = new Scanner(new File("C:\\Users\\aerot\\coding\\git-items\\SelfCheckoutSim\\grocery-items.txt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

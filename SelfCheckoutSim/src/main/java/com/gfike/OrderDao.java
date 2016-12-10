@@ -2,13 +2,12 @@ package com.gfike;
 
 import javax.transaction.Transactional;
 
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Transactional
 @Repository
-public interface ItemDao extends CrudRepository<Item, Integer> {
+public interface OrderDao extends CrudRepository<Item, Integer>{
+	Order findByUid(int uid);
 
-	Item findByName(String name);
 }

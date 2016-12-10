@@ -1,7 +1,5 @@
 package com.gfike;
 
-
-//what's in the db
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,28 +11,16 @@ import javax.validation.constraints.NotNull;
 public class Item {
 	private String name;
 	private int price;
-	private int plu;
+	private String plu;
 	private int wt;
 	private String fs;
 	private String meas;
-	private int barcode;
-	
-	public Item(String name, int price, int plu, String fs, String meas) {
-		this.name = name;
-		this.price = price;
-		this.plu = plu;
-		this.fs = fs;
-		this.meas = meas;
-	}
-	
-	
+	private int lTax;
+	private int hTax;
+
 	public Item (){}
-	
-	
 
-
-	public Item(String name, int price, int plu, int wt, String fs, String meas) {
-		super();
+	public Item(String name, int price, String plu, int wt, String fs, String meas) {
 		this.name = name;
 		this.price = price;
 		this.plu = plu;
@@ -42,7 +28,6 @@ public class Item {
 		this.fs = fs;
 		this.meas = meas;
 	}
-
 
 	@Column(name="name", unique = true)
 	@NotNull
@@ -67,11 +52,11 @@ public class Item {
 	@Id
 	@NotNull
 	@Column(name="PLU", unique = true)
-	public int getPlu() {
+	public String getPlu() {
 		return plu;
 	}
 	
-	public void setPlu(int plu) {
+	public void setPlu(String plu) {
 		this.plu = plu;
 	}
 	
@@ -94,17 +79,17 @@ public class Item {
 		this.fs = fs;
 	}
 	
-	public static int makePlu (String name) {
-		int plu = 0;
-		for (int i = 0; i < 11; i++) {
-			
-			//for loop inside of for loop?
-			char c = name.charAt(i);
-			int ascii = (int) c;
-			plu += ascii;
-		}
+	public static String makePlu (String name) {
+		String temp_plu = "";
+		int  i = 0;
+        while (temp_plu.length() < 11) {
+                char c = name.charAt(i);
+                int ascii = (int) c;
+                temp_plu += ascii;
+                i ++;
+        }
 		
-		return plu;
+		return temp_plu;
 	}
 	
 	@Column(name="UnitOfMeasure")
@@ -124,31 +109,42 @@ public class Item {
 		return this.name + " " + this.plu + " " + this.price + " per " + this.meas + " " + this.fs;
 	}
 	
-	public int getBarcode() {
-		return barcode;
+	
+	public boolean equals(Item i) {
+		if (this.plu == i.getPlu()) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public float getlTax() {
+		return lTax;
+	}
+
+
+	public void setlTax(int lTax) {
+		this.lTax = lTax;
+	}
+
+
+	public float gethTax() {
+		return hTax;
+	}
+
+
+	public void sethTax(int hTax) {
+		this.hTax = hTax;
 	}
 	
-	public void setBarcode(boolean choice) {
-		barcode = 0;
-		if (choice) {
-			barcode += this.plu;
-			this.barcode = barcode;
+	public void deterTax () {
+		if(this.fs.equals("y")) {
+			this.lTax = price * 4;
 		}
+		
 		else {
-			this.barcode = barcode;
+			this.hTax = price * 9;
 		}
-	}
-
-
-	public double getlTax() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	public double gethTax() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 }
