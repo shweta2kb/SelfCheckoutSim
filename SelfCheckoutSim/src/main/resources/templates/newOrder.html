@@ -4,30 +4,34 @@
 <nav th:replace="base :: nav"></nav>
 <body>
 
+<form>
 Type in the name of the item you wish to add:
 <input list="items"></input>
-<datalist id="items" th:each="item :${list}">
-<option th:option="${item}"></option>
+<datalist id="items">
+<option th:each="item :${list}" th:value="${item}" th:text="${item}"></option>
 </datalist>
-<form action="AddItem">
-<button>Add Item to Cart</button>
-</form>
+<input type="submit" name="edit_cart" value="Add Item"></input>
+
+
 <br></br>
+
 
 Current Cart:
-<form action="removeItem">
-<select name="cart" th:each="item :${cart_lst}">
-<option th:option="${item}"></option>
+
+<select name="cart" >
+<option th:each="item :${cart_lst}" th:value="${item}" th:text="${item}"></option>
 </select>
-<button>Remove Item from Cart</button>
+<input type="submit" name="edit_cart" value="Remove Item"></input>
 </form>
 <br></br>
 
 
-<br></br>
-<form action="checkout">
-<button>Checkout</button>
+
+
+<form method="post" action="/checkout.html">
+<input type="submit" value="Checkout"></input>
 </form>
+
 
 </body>
 
