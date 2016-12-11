@@ -1,37 +1,48 @@
 package com.gfike;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class OrderController {
+	@Autowired
+	private ItemDao itemDao;
+	
 	private ArrayList <Item> cart = new ArrayList<Item>();
+	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public String index() {
+		return "index";
+	}
+	
+	@RequestMapping(value="/", method=RequestMethod.POST)
+	public String index (HttpServletRequest request, Model model) {
+		return "index";
+	}
+	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
-	public String newOrder (Model model){
-		Scanner s = null;
-		try {
-			//file pathname on Surface: "C:\\Users\\aerot\\coding\\git-items\\SelfCheckoutSim\\grocery-items.txt"
-			s = new Scanner(new File("C:\\Users\\aerot\\coding\\git-items\\SelfCheckoutSim\\grocery-items.txt"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public String newOrder (@PathVariable ArrayList cart, Model model){
+		ArrayList<Item> allItems = (ArrayList<Item>) itemDao.findAll();
 		ArrayList<String> list = new ArrayList<String>();
-		while (s.hasNext()){
-		    list.add(s.next());
-		}
-		s.close();
 		
+		for(Item i : allItems) {
+			list.add(i.getName());
+		}
+		
+		ArrayList<String> cart_lst = new ArrayList<String>();
+		for (Item i : cart) {
+			cart_lst.add(i.getName());
+		}
 		model.addAttribute("list", list);
+		model.addAttribute("cart_lst", cart_lst);
 		return "newOrder";
 	}
 	
@@ -40,8 +51,15 @@ public class OrderController {
 		
 		String action = request.getParameter("action");
 		
+		Item i = itemDao.findByName(request.getParameter("items"));
 		if(action.equalsIgnoreCase("additem")) {
-			
+			cart.add(i);
+			return "newOrder";
+		}
+		
+		if (action.equalsIgnoreCase("removeItem")) {
+			Item j = itemDao.findByName(request.getParameter("cart"));
+			cart.remove(j);
 		}
 		return "newOrder";
 		

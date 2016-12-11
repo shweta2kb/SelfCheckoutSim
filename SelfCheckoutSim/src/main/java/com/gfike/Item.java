@@ -118,7 +118,7 @@ public class Item {
 	}
 
 
-	public float getlTax() {
+	public int getlTax() {
 		return lTax;
 	}
 
@@ -128,7 +128,7 @@ public class Item {
 	}
 
 
-	public float gethTax() {
+	public int gethTax() {
 		return hTax;
 	}
 

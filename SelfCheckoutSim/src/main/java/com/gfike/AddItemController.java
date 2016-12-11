@@ -54,6 +54,8 @@ public class AddItemController{
 			itemDao.save(i);
 			String msg = "Item has been succesfully added!";
 			model.addAttribute("msg", msg);
+			String lst_item = i.getName();
+			model.addAttribute("lst_item", lst_item);
 		}
 		return "addItem";
 	}

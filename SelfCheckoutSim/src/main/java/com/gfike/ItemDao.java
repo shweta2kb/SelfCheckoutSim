@@ -1,5 +1,7 @@
 package com.gfike;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 
@@ -11,4 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface ItemDao extends CrudRepository<Item, Integer> {
 
 	Item findByName(String name);
+	List <Item> findAll();
 }

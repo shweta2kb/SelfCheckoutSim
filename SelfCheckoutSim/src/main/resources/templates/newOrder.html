@@ -5,22 +5,24 @@
 <body>
 
 Type in the name of the item you wish to add:
-<form action="AddItem">
-<input list="items">
+<input list="items"></input>
 <datalist id="items" th:each="item :${list}">
-<option th:value="${item}">
+<option th:option="${item}"></option>
 </datalist>
+<form action="AddItem">
 <button>Add Item to Cart</button>
 </form>
-
+<br></br>
 
 Current Cart:
+<form action="removeItem">
+<select name="cart" th:each="item :${cart_lst}">
+<option th:option="${item}"></option>
+</select>
+<button>Remove Item from Cart</button>
+</form>
+<br></br>
 
-<table>
-<tr th:each="item :${cart}">
-<td th:text="${item.getName()}"></td>
-</tr>
-</table>
 
 <br></br>
 <form action="checkout">
