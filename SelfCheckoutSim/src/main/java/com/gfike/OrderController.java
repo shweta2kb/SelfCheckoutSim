@@ -1,5 +1,7 @@
 package com.gfike;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,7 @@ public class OrderController {
 
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (){
-		ArrayList <String> lst = 
+		ArrayList <String> lst;
 		return "newOrder";
 	}
 	
