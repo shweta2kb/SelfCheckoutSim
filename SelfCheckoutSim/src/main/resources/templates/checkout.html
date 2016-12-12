@@ -17,13 +17,13 @@
 		<td th:text="${item.name}"></td>
 	</tr>
 </table> 
-
-<form>
-<input name="scan"></input><button>Scan item</button>
+Enter the name of the item to scan and then bag it:
+<form method="post">
+<input type="text" name="scan"></input><button>Scan item</button>
 </form>
 
-<form>
-<input name="bag"></input><button>Bag item</button>
+<form method="post">
+<input type="text" name="bag" value="${scanned}"></input><button>Bag item</button>
 </form>
 
 <form th:replace="base :: removeItem"></form>

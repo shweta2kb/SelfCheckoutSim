@@ -67,6 +67,14 @@ public class OrderController {
 	@RequestMapping(value="/checkout", method=RequestMethod.POST)
 	public String checkout (HttpServletRequest request, Model model) {
 		model.addAttribute("cart", cart);
+		Item scanned = itemDao.findByName(request.getParameter("scan"));
+		Item bagged = itemDao.findByName(request.getParameter("bag"));
+		
+		if(bagged != null) {
+			String msg = bagged + " must be scanned first";
+			model.addAttribute("msg", msg);
+		}
+		
 		return "checkout";
 	}
 }
