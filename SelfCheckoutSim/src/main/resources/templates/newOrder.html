@@ -10,12 +10,13 @@
 </label>
 </form>
 
-Current cart:
+<h3>Current cart:</h3>
 <table th:each="item : ${cart}">
 	<tr>
 		<td th:text="${item.name}"></td>
 	</tr>
 </table> 
+
 
 <form th:replace="base :: removeItem"></form>
 <form th:replace="base :: checkout"></form>

@@ -14,17 +14,7 @@ public class OrderController {
 	@Autowired
 	private ItemDao itemDao;
 	private ArrayList<Item> cart = new ArrayList<Item>();
-
-	
-	@RequestMapping(value="/", method=RequestMethod.GET)
-	public String index() {
-		return "index";
-	}
-	
-	@RequestMapping(value="/", method=RequestMethod.POST)
-	public String index (HttpServletRequest request, Model model) {
-		return "index";
-	}
+	private ArrayList<Item> trans = new ArrayList<Item> ();
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model){
@@ -36,7 +26,6 @@ public class OrderController {
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
 		String product = request.getParameter("product");
-		
 		Item i = itemDao.findByName(product);
 		
 		if(i == null) {
@@ -47,7 +36,8 @@ public class OrderController {
 		
 		cart.add(i);
 		model.addAttribute("cart", cart);
-		
+		String msg = i + " was succesfully added to the cart!";
+		model.addAttribute("msg", msg);
 		return "newOrder";
 	}
 	
@@ -61,9 +51,22 @@ public class OrderController {
 	public String editCart (HttpServletRequest request, Model model) {
 		model.addAttribute("cart", cart);
 		String product = request.getParameter("product");
-		cart.remove(itemDao.findByName(product));
+		Item i = itemDao.findByName(product);
+		String msg = i +" was removed from the cart";
+		model.addAttribute("msg", msg);
+		cart.remove(i);
 		return "editCart";
 	}
 	
+	@RequestMapping(value="/checkout", method=RequestMethod.GET)
+	public String checkout (Model model) {
+		model.addAttribute("cart", cart);
+		return "checkout";
+	}
 	
+	@RequestMapping(value="/checkout", method=RequestMethod.POST)
+	public String checkout (HttpServletRequest request, Model model) {
+		model.addAttribute("cart", cart);
+		return "checkout";
+	}
 }
