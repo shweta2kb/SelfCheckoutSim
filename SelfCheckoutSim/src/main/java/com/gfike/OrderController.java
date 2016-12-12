@@ -26,35 +26,25 @@ public class OrderController {
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model){
-		ArrayList<Item> allItems = (ArrayList<Item>) itemDao.findAll();
-		ArrayList<String> list = new ArrayList<String>();
-
-		for(Item i : allItems) {
-			list.add(i.getName());
-		}
-		
-		ArrayList<String> cart_lst = new ArrayList<String>();
-		for (Item i : cart) {
-			cart_lst.add(i.getName());
-		}
-		model.addAttribute("list", list);
-		model.addAttribute("cart_lst", cart_lst);
+		ArrayList <Item> products = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("products", products);
+		model.addAttribute("cart", cart);
 		return "newOrder";
 	}
 	
 	@RequestMapping(value="/newOrder",method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
+		String item_add = request.getParameter("add");
+		String item_remove = request.getParameter("remove");
 		
-		Item i = itemDao.findByName(request.getParameter("items"));
-		if(action.equalsIgnoreCase("additem")) {
-			cart.add(i);
-			return "newOrder";
-		}
+		Item i = itemDao.findByName(item_add);
+		Item j = itemDao.findByName(item_remove);
 		
-		if (action.equalsIgnoreCase("removeItem")) {
-			Item j = itemDao.findByName(request.getParameter("cart"));
-			cart.remove(j);
-		}
+		cart.add(i);
+		cart.remove(j);
+		
+		model.addAttribute("cart", cart);
+
 		return "newOrder";
 		
 	}
