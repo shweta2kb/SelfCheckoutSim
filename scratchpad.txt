@@ -28,3 +28,9 @@
 			</td>
 		</tr>
 	</table>
+
+<form>
+<div th:each="item : ${all}">
+<label th:text="${item.name}"><input type="checkbox" th:field="*{product}" value="{item.name}"/></label>
+</div>
+</form>
