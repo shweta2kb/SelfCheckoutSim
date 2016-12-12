@@ -8,8 +8,22 @@
 <ul>
 	<li><a href="newOrder.html">Make a new order</a></li>
 	<li><a href="viewOrder.html">View past orders</a></li>
+	<li><a href="addItem.html">Add items to db</a></li>
 	</ul>
 </nav>
+
+
+<form th:fragment="checkout" action="checkout.html">
+<input type="submit" value="Checkout"/>
+</form>
+
+<form th:fragment="removeItem" action="editCart.html">
+<input type="submit" value="Remove an item"/>
+</form>
+
+<form th:fragment="addItem" action="newOrder.html">
+<input type="submit" value="Add more items"/>
+</form>
 
 
 <footer th:fragment="docfoot">

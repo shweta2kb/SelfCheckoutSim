@@ -1,12 +1,8 @@
 package com.gfike;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +16,9 @@ public class AddItemController{
 	private ItemDao itemDao;
 	
 	@RequestMapping(value = "/addItem", method = RequestMethod.GET)
-	public String addItem() {
+	public String addItem(Model model) {
+		ArrayList <Item> all = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("all", all);
 		return "addItem";
 	}
 	
@@ -34,8 +32,12 @@ public class AddItemController{
 		String meas = request.getParameter("meas");
 		
 		if (plu.equals("") || plu == null) {
-
+			try{
 			plu = Item.makePlu(name);
+			} catch (StringIndexOutOfBoundsException e) {
+				String n_name = name + name;
+				plu = Item.makePlu(n_name);
+			}
 		}
 		
 
@@ -43,7 +45,7 @@ public class AddItemController{
 		
 		
 		if (db_i != null) {
-			String error = "This item has already been added";
+			String error = "This item has already been added!";
 			model.addAttribute("error", error);
 			model.addAttribute("name", name);
 			model.addAttribute("plu", plu);
@@ -52,11 +54,24 @@ public class AddItemController{
 		else {
 			Item i = new Item (name, price, plu, wt, fs, meas);
 			itemDao.save(i);
-			String msg = "Item has been succesfully added!";
+			String msg = i.getName() + " has been succesfully added!";
 			model.addAttribute("msg", msg);
-			String lst_item = i.getName();
-			model.addAttribute("lst_item", lst_item);
 		}
+		
+		ArrayList <Item> all = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("all", all);
 		return "addItem";
 	}
+
+@RequestMapping(value = "/error", method = RequestMethod.GET)
+public String error (HttpServletRequest request) {
+	return "error";
+}
+
+@RequestMapping(value = "/error", method = RequestMethod.POST)
+public String error (HttpServletRequest request, Model model) {
+	return "error";
+}
+
+
 }

@@ -5,21 +5,20 @@
 <body>
 
 <form method="post">
-<label>Type in the name of the item you wish to add:
-<input name="product" type="text" required="required"></input><button type="submit">Add item to cart</button>
+<label>Type in the name of the item you wish to remove:
+<input name="product" type="text" required="required"></input><button type="submit">Remove item from cart</button>
 </label>
 </form>
 
-Current cart:
+Current Cart:
 <table th:each="item : ${cart}">
 	<tr>
 		<td th:text="${item.name}"></td>
 	</tr>
-</table> 
+</table>
 
-<form th:replace="base :: removeItem"></form>
 <form th:replace="base :: checkout"></form>
-
+<form th:replace="base :: addItem"></form>
 </body>
 
 <footer th:replace="base :: docfoot"></footer>

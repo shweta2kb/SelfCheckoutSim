@@ -19,3 +19,12 @@
 		</td>
 	</tr>
 </table>
+
+<label>Click on an item to add it to the cart: </label>
+	<table th:each="product : ${products}">
+		<tr>
+			<td>
+				<form method="post" action="newOrder/{cart}"><input type="submit" th:value="${product.name}"></input></form>
+			</td>
+		</tr>
+	</table>
