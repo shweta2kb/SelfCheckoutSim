@@ -1,7 +1,5 @@
 package com.gfike;
 
-
-//what's in the db
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,27 +11,16 @@ import javax.validation.constraints.NotNull;
 public class Item {
 	private String name;
 	private int price;
-	private int plu;
+	private String plu;
 	private int wt;
 	private String fs;
 	private String meas;
-	
-	public Item(String name, int price, int plu, String fs, String meas) {
-		this.name = name;
-		this.price = price;
-		this.plu = plu;
-		this.fs = fs;
-		this.meas = meas;
-	}
-	
-	
+	private int lTax;
+	private int hTax;
+
 	public Item (){}
-	
-	
 
-
-	public Item(String name, int price, int plu, int wt, String fs, String meas) {
-		super();
+	public Item(String name, int price, String plu, int wt, String fs, String meas) {
 		this.name = name;
 		this.price = price;
 		this.plu = plu;
@@ -41,7 +28,6 @@ public class Item {
 		this.fs = fs;
 		this.meas = meas;
 	}
-
 
 	@Column(name="name", unique = true)
 	@NotNull
@@ -66,11 +52,11 @@ public class Item {
 	@Id
 	@NotNull
 	@Column(name="PLU", unique = true)
-	public int getPlu() {
+	public String getPlu() {
 		return plu;
 	}
 	
-	public void setPlu(int plu) {
+	public void setPlu(String plu) {
 		this.plu = plu;
 	}
 	
@@ -93,17 +79,17 @@ public class Item {
 		this.fs = fs;
 	}
 	
-	public static int makePlu (String name) {
-		int plu = 0;
-		for (int i = 0; i < 11; i++) {
-			
-			//for loop inside of for loop?
-			char c = name.charAt(i);
-			int ascii = (int) c;
-			plu += ascii;
-		}
+	public static String makePlu (String name) {
+		String temp_plu = "";
+		int  i = 0;
+        while (temp_plu.length() < 11) {
+                char c = name.charAt(i);
+                int ascii = (int) c;
+                temp_plu += ascii;
+                i ++;
+        }
 		
-		return plu;
+		return temp_plu;
 	}
 	
 	@Column(name="UnitOfMeasure")
@@ -118,40 +104,47 @@ public class Item {
 	}
 
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + plu;
-		result = prime * result + price;
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Item))
-			return false;
-		Item other = (Item) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (plu != other.plu)
-			return false;
-		if (price != other.price)
-			return false;
-		return true;
-	}
 	
 	public String toString(){
 		return this.name + " " + this.plu + " " + this.price + " per " + this.meas + " " + this.fs;
+	}
+	
+	
+	public boolean equals(Item i) {
+		if (this.plu == i.getPlu()) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public int getlTax() {
+		return lTax;
+	}
+
+
+	public void setlTax(int lTax) {
+		this.lTax = lTax;
+	}
+
+
+	public int gethTax() {
+		return hTax;
+	}
+
+
+	public void sethTax(int hTax) {
+		this.hTax = hTax;
+	}
+	
+	public void deterTax () {
+		if(this.fs.equals("y")) {
+			this.lTax = price * 4;
+		}
+		
+		else {
+			this.hTax = price * 9;
+		}
 	}
 	
 }

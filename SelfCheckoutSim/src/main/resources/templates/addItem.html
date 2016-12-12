@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <head th:replace="base :: deochead"></head>
+<nav th:replace="base :: nav"></nav>
 <body>
 
 <form method="post">
 	<label>
-		Name: <input type="text" name="name" required="required"/>
+		Name: <input type="text" name="name" required="required" th:value="${name}"/>
 	</label>
 	<label>
 		Price: <input type="number" name="price" required="required" value="0"/>
 	</label>
-	<label>per Unit<input type="checkbox" name="meas" value="unit"/></label>
+	<label>per Unit<input type="checkbox" name="meas" value="unit" /></label>
 	<label>per Pound<input type="checkbox" name="meas" value="lb"/></label>
 	<label>
-		PLU: <input type="number" name="plu" value="0"/>
+		PLU: <input type="number" name="plu" value="0" th:value="${plu}"/>
+		<span th:text="${plu}"></span>
 	</label>
 	<br></br>
 	<label>
@@ -24,6 +26,27 @@
 		<label>No<input type="checkbox" name="fs" value="n"/></label>
 	<button type="submit">Submit</button>
 </form>
-</body>
+<br></br>
+
 <footer th:replace="base :: docfoot"></footer>
+
+<h1>Items already added:</h1>
+<table> 
+	<tr>
+		<td><b>Name</b></td>
+		<td><b>PLU</b></td>
+		<td><b>Price</b></td>
+		<td><b>Foodstamps Eligible</b></td>
+	</tr>
+	<tr th:each="item : ${all}">
+		<td th:text="${item.name}"></td>
+		<td th:text="${item.plu}"></td>
+		<td th:text="${item.price}"></td>
+		<td th:text="${item.fs}"></td>
+	</tr>
+</table>
+
+</body>
+
+
 </html>

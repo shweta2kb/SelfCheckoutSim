@@ -1,7 +1,8 @@
 package com.gfike;
 
-import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,9 @@ public class AddItemController{
 	private ItemDao itemDao;
 	
 	@RequestMapping(value = "/addItem", method = RequestMethod.GET)
-	public String addItem() {
+	public String addItem(Model model) {
+		ArrayList <Item> all = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("all", all);
 		return "addItem";
 	}
 	
@@ -23,31 +26,52 @@ public class AddItemController{
 	public String addItem(HttpServletRequest request, Model model) {
 		String name = request.getParameter("name");
 		int price = Integer.parseInt(request.getParameter("price"));
-		int plu = Integer.parseInt(request.getParameter("plu"));
+		String plu = request.getParameter("plu");
 		int wt = Integer.parseInt(request.getParameter("wt"));
 		String fs = request.getParameter("fs");
 		String meas = request.getParameter("meas");
 		
-		if (plu == 0) {
-
-			plu += Item.makePlu(name);
+		if (plu.equals("") || plu == null) {
+			try{
+			plu = Item.makePlu(name);
+			} catch (StringIndexOutOfBoundsException e) {
+				String n_name = name + name;
+				plu = Item.makePlu(n_name);
+			}
 		}
-		Item i = new Item();
-		if (wt == 0 ){
-		i = new Item(name, price, plu, fs, meas);
-		}
-		i = new Item(name, price, plu,wt, fs, meas);
 		
-		if (i.equals(itemDao.findByPlu(plu))) {
-			String error = "This item has already been added \n";
+
+		Item db_i = itemDao.findByName(name);
+		
+		
+		if (db_i != null) {
+			String error = "This item has already been added!";
 			model.addAttribute("error", error);
+			model.addAttribute("name", name);
+			model.addAttribute("plu", plu);
 			return "addItem";
 		}
 		else {
+			Item i = new Item (name, price, plu, wt, fs, meas);
 			itemDao.save(i);
-			String msg = "Item has been succesfully added! \n";
+			String msg = i.getName() + " has been succesfully added!";
 			model.addAttribute("msg", msg);
 		}
+		
+		ArrayList <Item> all = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("all", all);
 		return "addItem";
 	}
+
+@RequestMapping(value = "/error", method = RequestMethod.GET)
+public String error (HttpServletRequest request) {
+	return "error";
+}
+
+@RequestMapping(value = "/error", method = RequestMethod.POST)
+public String error (HttpServletRequest request, Model model) {
+	return "error";
+}
+
+
 }

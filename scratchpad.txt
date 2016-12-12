@@ -1,0 +1,30 @@
+
+
+
+<label>Choose a browser from this list:
+<input list="browsers" name="myBrowser" /></label>
+<datalist id="browsers" th:each="product : ${products}">
+<option th:value="${product.name}"></option>
+</datalist>
+
+<select name="select" th:each="product : ${products}">
+  <option th:value="${product.name}"></option> 
+</select>
+
+<label>Current cart</label>
+<table th:each="product : ${cart}">
+	<tr>
+		<td>
+		<form method="post" name="remove"><input type="submit" th:value="${product.name}"></input></form>
+		</td>
+	</tr>
+</table>
+
+<label>Click on an item to add it to the cart: </label>
+	<table th:each="product : ${products}">
+		<tr>
+			<td>
+				<form method="post" action="newOrder/{cart}"><input type="submit" th:value="${product.name}"></input></form>
+			</td>
+		</tr>
+	</table>

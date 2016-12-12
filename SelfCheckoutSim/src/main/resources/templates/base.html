@@ -3,17 +3,32 @@
 <head th:fragment="dochead">
 	<title>Self-Checkout Simulator</title>
 </head>
+
 <nav th:fragment="nav">
 <ul>
-	<li><a href="newOrder.html">Make a new Order</a></li>
+	<li><a href="newOrder.html">Make a new order</a></li>
 	<li><a href="viewOrder.html">View past orders</a></li>
+	<li><a href="addItem.html">Add items to db</a></li>
 	</ul>
 </nav>
 
 
+<form th:fragment="checkout" action="checkout.html">
+<input type="submit" value="Checkout"/>
+</form>
+
+<form th:fragment="removeItem" action="editCart.html">
+<input type="submit" value="Remove an item"/>
+</form>
+
+<form th:fragment="addItem" action="newOrder.html">
+<input type="submit" value="Add more items"/>
+</form>
+
+
 <footer th:fragment="docfoot">
-<span th:text="${error}"></span>
-<span th:text="${msg}"></span>
+<p th:text="${error}"></p>
+<p th:text="${msg}"></p>
 </footer>
 
 
