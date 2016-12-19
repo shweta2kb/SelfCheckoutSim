@@ -54,7 +54,7 @@ public class AddItemController{
 		else {
 			Item i = new Item (name, price, plu, wt, fs, meas);
 			itemDao.save(i);
-			String msg = i.getName() + " has been succesfully added!";
+			String msg = i.getName() + " has been succesfully added " + "with a plu of  "+ plu;
 			model.addAttribute("msg", msg);
 		}
 		

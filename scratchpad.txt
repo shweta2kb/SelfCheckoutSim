@@ -34,3 +34,28 @@
 <label th:text="${item.name}"><input type="checkbox" th:field="*{product}" value="{item.name}"/></label>
 </div>
 </form>
+
+<table th:each="item : ${cart}">
+	<tr>
+		<td th:text="${item.name}"></td>
+	</tr>
+</table> 
+
+
+<form th:replace="base :: removeItem"></form>
+<form th:replace="base :: checkout"></form>
+
+
+<form method="post">
+<label>Type in the name of the item you wish to add:
+<input name="product" type="text" required="required"></input><button type="submit">Add item to cart</button>
+</label>
+</form>
+
+//		if(i == null) {
+//			String error = "Item was not found. Enter another item.";
+//			model.addAttribute("error", error);
+//			return "newOrder";
+//		}
+
+//		String product = request.getParameter("product");

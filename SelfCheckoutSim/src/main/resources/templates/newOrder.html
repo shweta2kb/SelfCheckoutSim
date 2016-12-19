@@ -5,21 +5,20 @@
 <body>
 
 <form method="post">
-<label>Type in the name of the item you wish to add:
-<input name="product" type="text" required="required"></input><button type="submit">Add item to cart</button>
-</label>
+<label>Choose an item from the list to add to the cart:</label>
+<input list="items" name="items" />
+<datalist id="items" th:each="item : ${items}">
+<option th:value="${item.name}"></option>
+</datalist>
+<button type="submit">Add item to cart</button>
 </form>
 
+
+
 <h3>Current cart:</h3>
-<table th:each="item : ${cart}">
-	<tr>
-		<td th:text="${item.name}"></td>
-	</tr>
-</table> 
-
-
-<form th:replace="base :: removeItem"></form>
-<form th:replace="base :: checkout"></form>
+<select name="select" th:each="item : ${cart}">
+  <option th:value="${item.name}"></option> 
+</select>
 
 </body>
 

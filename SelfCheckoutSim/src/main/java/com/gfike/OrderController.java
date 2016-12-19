@@ -14,25 +14,24 @@ public class OrderController {
 	@Autowired
 	private ItemDao itemDao;
 	private ArrayList<Item> cart = new ArrayList<Item>();
-	private ArrayList<Item> trans = new ArrayList<Item> ();
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model){
 		model.addAttribute("cart", cart);
-
+		ArrayList <Item> items = (ArrayList<Item>) itemDao.findAll();
+		ArrayList<String> allItemNames = new ArrayList<String> ();
+		for (Item i: items) {
+			String name = i.getName();
+			allItemNames.add(name);
+		}
+		model.addAttribute("items", allItemNames);
 		return "newOrder";
 	}
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
-		String product = request.getParameter("product");
-		Item i = itemDao.findByName(product);
-		
-		if(i == null) {
-			String error = "Item was not found. Enter another item.";
-			model.addAttribute("error", error);
-			return "newOrder";
-		}
+
+		Item i = itemDao.findByName(request.getParameter("items"));
 		
 		cart.add(i);
 		model.addAttribute("cart", cart);
