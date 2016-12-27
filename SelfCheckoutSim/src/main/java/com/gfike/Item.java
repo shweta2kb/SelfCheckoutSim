@@ -108,14 +108,6 @@ public class Item {
 	public String toString(){
 		return this.name + " " + this.plu + " " + this.price + " per " + this.meas + " " + this.fs;
 	}
-	
-	
-	public boolean equals(Item i) {
-		if (this.plu == i.getPlu()) {
-			return true;
-		}
-		return false;
-	}
 
 
 	public int getlTax() {
@@ -146,5 +138,62 @@ public class Item {
 			this.hTax = price * 9;
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fs == null) ? 0 : fs.hashCode());
+		result = prime * result + hTax;
+		result = prime * result + lTax;
+		result = prime * result + ((meas == null) ? 0 : meas.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((plu == null) ? 0 : plu.hashCode());
+		result = prime * result + price;
+		result = prime * result + wt;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		if (fs == null) {
+			if (other.fs != null)
+				return false;
+		} else if (!fs.equals(other.fs))
+			return false;
+		if (hTax != other.hTax)
+			return false;
+		if (lTax != other.lTax)
+			return false;
+		if (meas == null) {
+			if (other.meas != null)
+				return false;
+		} else if (!meas.equals(other.meas))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (plu == null) {
+			if (other.plu != null)
+				return false;
+		} else if (!plu.equals(other.plu))
+			return false;
+		if (price != other.price)
+			return false;
+		if (wt != other.wt)
+			return false;
+		return true;
+	}
+	
+	
 	
 }

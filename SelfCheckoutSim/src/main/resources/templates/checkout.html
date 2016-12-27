@@ -4,13 +4,22 @@
 <nav th:replace="base :: nav"></nav>
 <body>
 
-<form>
-	<label>
+<form method="post">
+	<label> Current cart:
 		<select name="cart">
   			<option th:each="item : ${cart}" th:text="${item.name}"></option> 
 		</select>
 	</label>
+	<input type="submit" name="action" value="Scan item"/>
+	<input type="submit" name="action" value="Bag item"/>
+	<input type="submit" name="action" value="Weigh item"/>
 </form>
+
+<br/>
+<h3>Current order: </h3>
+<table>
+<tr th:each="item : ${trans}" th:text="${item.name}"></tr>
+</table>
 
 </body>
 

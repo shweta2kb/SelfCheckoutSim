@@ -26,14 +26,28 @@ public class OrderController {
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
-
-		Item i = itemDao.findByName(request.getParameter("shelf"));	
-		cart.add(i);
-		model.addAttribute("cart", cart);
-		String msg = i.getName() + " was succesfully added to the cart!";
-		model.addAttribute("msg", msg);
-
-		return "newOrder";
+		ArrayList <Item> items = (ArrayList<Item>) itemDao.findAll();
+		String action = request.getParameter("action");
+		if (action.equalsIgnoreCase("add item")) {
+			Item i = itemDao.findByName(request.getParameter("shelf"));	
+			cart.add(i);
+			model.addAttribute("cart", cart);
+			String msg = i.getName() + " was succesfully added to the cart!";
+			model.addAttribute("msg", msg);
+			model.addAttribute("items", items);
+			return "newOrder";
+		}
+		if (action.equalsIgnoreCase("remove item")) {
+			model.addAttribute("items", items);
+			Item i = itemDao.findByName(request.getParameter("cartSelect"));
+			cart.remove(i);
+			String msg = i.getName() + " was succesfully removed from the cart!";
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", cart);
+			return "newOrder";
+		}
+		return "redirect:checkout";
+		
 	}
 	
 	
@@ -46,7 +60,13 @@ public class OrderController {
 	@RequestMapping(value="/checkout", method=RequestMethod.POST)
 	public String checkout (HttpServletRequest request, Model model) {
 		model.addAttribute("cart", cart);
+		String action = request.getParameter("action");
+		Uscan u = new Uscan();
+		String msg = "";
 		
+		if (action.equalsIgnoreCase("bag item") && u.getExp_wt() != u.getAct_wt()) {
+			msg += ""
+		}
 		return "checkout";
 	}
 }

@@ -1,6 +1,6 @@
 package com.gfike;
 
-public abstract class Uscan {
+public class Uscan {
 	private int act_wt;
 	private int exp_wt;
 	
