@@ -23,9 +23,5 @@ public class FuncController {
 	public String error (HttpServletRequest request) {
 		return "error";
 	}
-
-	@RequestMapping(value = "/error", method = RequestMethod.POST)
-	public String error (HttpServletRequest request, Model model) {
-		return "error";
-	}
 }
+

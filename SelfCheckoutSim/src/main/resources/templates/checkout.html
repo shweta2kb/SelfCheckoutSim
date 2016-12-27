@@ -4,30 +4,14 @@
 <nav th:replace="base :: nav"></nav>
 <body>
 
-<table th:each="item : ${cart}" class="right">
-	<tr>
-		<td>Current cart</td>
-		<td th:text="${item.name}"></td>
-	</tr>
-</table> 
-
-<table th:each="item : ${trans}" class="left">
-	<tr>
-		<td>Current order</td>
-		<td th:text="${item.name}"></td>
-	</tr>
-</table> 
-Enter the name of the item to scan and then bag it:
-<form method="post">
-<input type="text" name="scan"></input><button>Scan item</button>
+<form>
+	<label>
+		<select name="cart">
+  			<option th:each="item : ${cart}" th:text="${item.name}"></option> 
+		</select>
+	</label>
 </form>
 
-<form method="post">
-<input type="text" name="bag" value="${scanned}"></input><button>Bag item</button>
-</form>
-
-<form th:replace="base :: removeItem"></form>
-<form th:replace="base :: addItem"></form>
 </body>
 
 <footer th:replace="base :: docfoot"></footer>

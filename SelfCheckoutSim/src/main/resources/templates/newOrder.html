@@ -4,22 +4,26 @@
 <nav th:replace="base :: nav"></nav>
 <body>
 
+
 <form method="post">
-<label>Choose an item from the list to add to the cart:</label>
-<input list="items" name="items" />
-<datalist id="items" th:each="item : ${items}">
-<option th:value="${item.name}"></option>
-</datalist>
-<button type="submit">Add item to cart</button>
+	<label>Choose an item from the list to add to the cart or start type the name in:</label>
+	<input list="shelf" name="shelf" />
+	<datalist id="shelf">
+		<option th:each="item : ${items}" th:text="${item.name}"></option>
+	</datalist>
+	<button type="submit">Add item to cart</button>
 </form>
 
+<form method="post">
+	<input list="cart" name="cart"/>
+	<datalist id="cart">
+		<option th:each="item : ${cart}" th:text="${item.name}"></option>
+	</datalist>
+<button name="action" value="remove">Remove selected item</button>
+<button name="action" value="addAgain">Add another of the selected item</button>
+</form>
 
-
-<h3>Current cart:</h3>
-<select name="select" th:each="item : ${cart}">
-  <option th:value="${item.name}"></option> 
-</select>
-
+<span th:text="${test}"></span>
 </body>
 
 <footer th:replace="base :: docfoot"></footer>
