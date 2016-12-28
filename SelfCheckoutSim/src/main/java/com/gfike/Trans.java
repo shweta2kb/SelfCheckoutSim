@@ -42,4 +42,12 @@ public Trans (ArrayList<Item> lst) {
 	public void setLst(ArrayList<Item> lst) {
 		this.lst = lst;
 	}
+	
+	public void addItem(Item i) {
+		lst.add(i);
+	}
+	
+	public void removeItem(Item i) {
+		lst.remove(i);
+	}
 }
