@@ -16,6 +16,11 @@ public class OrderController {
 	private ItemDao itemDao;
 	@Autowired
 	private TransDao transDao;
+	@Autowired
+	private Trans t;
+	
+	private ArrayList <Item> cart = new ArrayList <Item> ();
+	private String msg;
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model){
@@ -27,36 +32,38 @@ public class OrderController {
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrder(HttpServletRequest request, Model model) {
 		ArrayList <Item> items = (ArrayList<Item>) itemDao.findAll();
-		String action = request.getParameter("action");
-		ArrayList <Item> cart = new ArrayList<Item>();
-		if (action.equalsIgnoreCase("add item")) {
-			Item i = itemDao.findByName(request.getParameter("shelf"));	
-			cart.add(i);
-			model.addAttribute("cart", cart);
-			String msg = i.getName() + " was succesfully added to the cart!";
-			model.addAttribute("msg", msg);
-			model.addAttribute("items", items);
-			return String.format("redirect:newOrder%s", msg);
-		}
-		String msg = "Add items to the cart to checkout or remove them";
 		model.addAttribute("items", items);
-		model.addAttribute("msg", msg);
-		return "newOrder";
+		String action = request.getParameter("action");
 		
+		if (action.equalsIgnoreCase("add item")) {
+			Item i = itemDao.findByName(request.getParameter("shelf"));
+			cart.add(i);
+			msg = i.getName() +" was sucessfully added to the cart!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		else if (action.equalsIgnoreCase("remove item") && cart.isEmpty()) {
+			msg = "Cart has nothing to remove!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		else if (action.equalsIgnoreCase("remove item") && !cart.isEmpty()) {
+			Item i = itemDao.findByName(request.getParameter("cartSelect"));
+			cart.remove(i);
+			msg = i.getName() + " has been removed from the cart!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		return "checkout";
+		}
+	
+	@RequestMapping(value="/checkout", method=RequestMethod.GET) 
+		public String checkout (Model model) {
+			model.addAttribute("cart", cart);
+			model.addAttribute("trans", t);
+			return "checkout";
+		}
 	}
-	
-	@RequestMapping(value = "/newOrder/{msg}", method=RequestMethod.GET)
-	public String newOrder(@PathVariable String msg, Model model) {
-		model.addAttribute("msg", msg);
-		return "newOrder";
-	}
-	
-	
-	@RequestMapping(value = "/newOrder/{msg}", method=RequestMethod.POST)
-	public String newOrder (@PathVariable String msg, Model model, HttpServletRequest request) {;
-		model.addAttribute("msg", msg);
-		return "newOrder";
-	}
-	
-	
-}
