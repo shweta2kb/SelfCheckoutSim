@@ -1,61 +1,49 @@
+model.addAttribute("cart", cart);
 
+if (action.equalsIgnoreCase("remove item")) {
+			model.addAttribute("items", items);
+			Item i = itemDao.findByName(request.getParameter("cartSelect"));
+			cart.remove(i);
+			String msg = i.getName() + " was succesfully removed from the cart!";
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", cart);
+			return "newOrder";
+		}
 
-
-<label>Choose a browser from this list:
-<input list="browsers" name="myBrowser" /></label>
-<datalist id="browsers" th:each="product : ${products}">
-<option th:value="${product.name}"></option>
-</datalist>
-
-<select name="select" th:each="product : ${products}">
-  <option th:value="${product.name}"></option> 
-</select>
-
-<label>Current cart</label>
-<table th:each="product : ${cart}">
-	<tr>
-		<td>
-		<form method="post" name="remove"><input type="submit" th:value="${product.name}"></input></form>
-		</td>
-	</tr>
-</table>
-
-<label>Click on an item to add it to the cart: </label>
-	<table th:each="product : ${products}">
-		<tr>
-			<td>
-				<form method="post" action="newOrder/{cart}"><input type="submit" th:value="${product.name}"></input></form>
-			</td>
-		</tr>
-	</table>
-
-<form>
-<div th:each="item : ${all}">
-<label th:text="${item.name}"><input type="checkbox" th:field="*{product}" value="{item.name}"/></label>
-</div>
-</form>
-
-<table th:each="item : ${cart}">
-	<tr>
-		<td th:text="${item.name}"></td>
-	</tr>
-</table> 
-
-
-<form th:replace="base :: removeItem"></form>
-<form th:replace="base :: checkout"></form>
-
-
-<form method="post">
-<label>Type in the name of the item you wish to add:
-<input name="product" type="text" required="required"></input><button type="submit">Add item to cart</button>
-</label>
-</form>
-
-//		if(i == null) {
-//			String error = "Item was not found. Enter another item.";
-//			model.addAttribute("error", error);
-//			return "newOrder";
-//		}
-
-//		String product = request.getParameter("product");
+@RequestMapping(value="/checkout", method=RequestMethod.GET)
+	public String checkout (Model model) {
+		model.addAttribute("cart", cart);
+		return "checkout";
+	}
+	
+	@RequestMapping(value="/checkout", method=RequestMethod.POST)
+	public String checkout (HttpServletRequest request, Model model) {
+		model.addAttribute("cart", cart);
+		String action = request.getParameter("action");
+		Uscan u = new Uscan();
+		msg = "Scan first item";
+		Item cartItem = itemDao.findByName(request.getParameter("cart"));
+		model.addAttribute("msg", msg);
+		
+		if(action.equalsIgnoreCase("scan item") && u.getAct_wt() == u.getExp_wt()) {
+			u.setExp_wt(cartItem.getWt());
+			Trans t = new Trans();
+			t.addItem(cartItem);
+			msg = "Place item in bagging area";
+		}
+		
+		//need to check to see if cart select is empty
+		else if(action.equalsIgnoreCase("scan item") && u.getAct_wt() != u.getExp_wt()) {
+			msg = "Place previous item in bagging area";
+		}
+		
+		else if (action.equalsIgnoreCase("bag item") && u.getAct_wt() != u.getExp_wt()) {
+			u.setAct_wt(cartItem.getWt());
+		}
+		
+		else if (action.equalsIgnoreCase("bag item") && u.getAct_wt() == u.getExp_wt()) {
+			msg = "Scan previous item";
+		}
+		
+		return "checkout";
+	}
