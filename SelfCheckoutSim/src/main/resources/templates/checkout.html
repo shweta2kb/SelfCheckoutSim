@@ -13,12 +13,23 @@
 	<input type="submit" name="action" value="Scan item"/>
 	<input type="submit" name="action" value="Bag item"/>
 	<input type="submit" name="action" value="Weigh item"/>
+	<br/>
+	<input type="submit" name="action" value="Pay now"/>
 </form>
 
 <br/>
 <h3>Current order: </h3>
 <table>
-<tr th:each="item : ${trans}" th:text="${item.name}"></tr>
+	<tr th:each="item : ${trans.lst}">
+		<td th:text="${item.name}"></td> 
+	<tr>
+		<td th:text="${trans.htotal}"></td>
+		<td th:text="${trans.ltotal}"></td>
+		<td  th:text="${trans.subtotal}"></td>
+	</tr>
+	<tr>
+		<td th:text="${trans.total}"></td>
+	</tr>
 </table>
 
 </body>
