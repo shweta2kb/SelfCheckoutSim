@@ -16,17 +16,13 @@ public class OrderController {
 	private ItemDao itemDao;
 	@Autowired
 	private TransDao transDao;
-	@Autowired
-	private Trans t;
 	
-	private ArrayList <Item> cart = new ArrayList <Item> ();
-	private String msg;
-	
+	//when page is first loaded
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model){
 		ArrayList <Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
-		return "newOrder";
+		return ("newOrder");
 	}
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
@@ -37,16 +33,62 @@ public class OrderController {
 		
 		if (action.equalsIgnoreCase("add item")) {
 			Item i = itemDao.findByName(request.getParameter("shelf"));
+			ArrayList <Item> cart = new ArrayList<Item> ();
+			cart.add(i);
+			String msg = i.getName() +" was sucessfully added to the cart!";
+			model.addAttribute("msg", msg);
+			return String.format("redirect:newOrder%s/%s/%s", items, cart, msg);
+		}
+		return String.format("redirect:newOrder%s", items);
+
+	}
+	
+	@RequestMapping(value="/newOrder{items}", method=RequestMethod.GET)
+	public String newOrder (Model model, @PathVariable ArrayList <Item> items){
+		model.addAttribute("items", items);
+		return String.format("redirect:newOrder%s", items);
+	}
+	
+	
+	@RequestMapping(value="/newOrder{items}", method=RequestMethod.POST)
+	public String newOrder(HttpServletRequest request, Model model, @PathVariable ArrayList <Item> items) {
+		model.addAttribute("items", items);
+		String action = request.getParameter("action");
+		
+		if (action.equalsIgnoreCase("add item")) {
+			Item i = itemDao.findByName(request.getParameter("shelf"));
+			ArrayList <Item> cart = new ArrayList<Item> ();
+			cart.add(i);
+			String msg = i.getName() +" was sucessfully added to the cart!";
+			model.addAttribute("msg", msg);
+			return String.format("redirect:newOrder%s/%s/%s", items, cart, msg);
+		}
+		
+		String msg = "Cart is empty!";
+		model.addAttribute("msg", msg);
+		return String.format("redirect:newOrder%s", items);
+
+	}
+	
+	@RequestMapping(value="/newOrder{items}/{cart}/{mesg}", method=RequestMethod.GET)
+	public String newOrder (@PathVariable ArrayList <Item> items, @PathVariable ArrayList <Item> cart,
+			@PathVariable String msg, Model model, HttpServletRequest request) {
+		model.addAttribute("cart", cart);
+		model.addAttribute("items", items);
+		model.addAttribute("msg", msg);
+		String action = request.getParameter("action");
+		if (action.equalsIgnoreCase("add item")) {
+			Item i = itemDao.findByName(request.getParameter("shelf"));
 			cart.add(i);
 			msg = i.getName() +" was sucessfully added to the cart!";
 			model.addAttribute("msg", msg);
-			return "newOrder";
+			return String.format("redirect:newOrder%s/%s/%s", items, cart, msg);
 		}
 		
 		else if (action.equalsIgnoreCase("remove item") && cart.isEmpty()) {
 			msg = "Cart has nothing to remove!";
 			model.addAttribute("msg", msg);
-			return "newOrder";
+			return String.format("redirect:newOrder%s/%s/%s", items, cart, msg);
 		}
 		
 		else if (action.equalsIgnoreCase("remove item") && !cart.isEmpty()) {
@@ -54,16 +96,11 @@ public class OrderController {
 			cart.remove(i);
 			msg = i.getName() + " has been removed from the cart!";
 			model.addAttribute("msg", msg);
-			return "newOrder";
+			return String.format("redirect:newOrder%s/%s/%s", items, cart, msg);
 		}
 		
-		return "checkout";
-		}
+		return String.format("redirect:checkout%s", cart);
+
+	}
 	
-	@RequestMapping(value="/checkout", method=RequestMethod.GET) 
-		public String checkout (Model model) {
-			model.addAttribute("cart", cart);
-			model.addAttribute("trans", t);
-			return "checkout";
-		}
 	}
