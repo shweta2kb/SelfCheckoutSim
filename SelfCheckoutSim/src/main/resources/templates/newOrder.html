@@ -5,23 +5,20 @@
 <body>
 
 
-<form method="post">
-	<label>Choose an item from the list to add to the cart or start type the name in:</label>
-	<input list="shelf" name="shelf" />
-	<datalist id="shelf">
-		<option th:each="item : ${items}" th:text="${item.name}"></option>
-	</datalist>
-	<input type="submit" name="action" value="Add Item"/>
-<br></br>
-	<label>Current cart</label>
-	<input list="cartSelect" name="cartSelect" />
-	<datalist id="cartSelect">
-		<option th:each="item : ${cart}" th:text="${item.name}"></option>
-	</datalist>
-	<input type="submit" name="action" value="Remove Item"/>
-	<input type="submit" name="action" value="Checkout"/>
-</form>
-
+	<form method="post">
+		<label>Choose an item from the list to add to the cart or
+			start type the name in:</label> <input list="shelf" name="shelf" />
+		<datalist id="shelf">
+			<option th:each="item : ${items}" th:text="${item.name}"></option>
+		</datalist>
+		<input type="submit" name="action" value="Add Item" /> <br></br> <label>Current
+			cart</label> <input list="cartSelect" name="cartSelect" />
+		<datalist id="cartSelect">
+			<option th:each="item : ${cart}" th:text="${item.name}"></option>
+		</datalist>
+		<input type="submit" name="action" value="Remove Item" /> <input
+			type="submit" name="action" value="Checkout" />
+	</form>
 </body>
 
 <footer th:replace="base :: docfoot"></footer>

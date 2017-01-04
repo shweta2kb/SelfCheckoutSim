@@ -10,52 +10,51 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="Trans")
+@Table(name = "Trans")
 public class Trans {
-	
-private int uid;
-ArrayList<Item> lst = new ArrayList<Item> ();
-private double subtotal;
-private double total;
-private double hTaxTotal;
-private double lTaxTotal;
-	
-public Trans () {}
 
-public Trans (ArrayList<Item> lst) {
-	this.lst = lst;
-}
+	private int uid;
+	private String lst;
+	private double subtotal;
+	private double total;
+	private double hTaxTotal;
+	private double lTaxTotal;
+
+	public Trans() {
+	}
 
 	@Id
-    @GeneratedValue
-    @NotNull
-    @Column(name = "uid", unique = true)
+	@GeneratedValue
+	@NotNull
+	@Column(name = "uid", unique = true)
 	public int getUid() {
 		return this.uid;
 	}
-	
+
 	protected void setUid(int uid) {
-        this.uid = uid;
-    }
-	
-	@Column(name="Items")
-	public ArrayList<Item> getLst() {
+		this.uid = uid;
+	}
+
+	@Column(name = "Items")
+	public String getLst() {
 		return lst;
 	}
 
-	public void setLst(ArrayList<Item> lst) {
+	public void setLst(String lst) {
 		this.lst = lst;
 	}
-	
+
 	public void addItem(Item i) {
-		lst.add(i);
+		lst += i.getPlu() + ",";
 	}
-	
+
 	public void removeItem(Item i) {
-		lst.remove(i);
+		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
+		items.remove(i);
+		this.lst = StrConvert.ArrLstToString(items);
 	}
-	
-	@Column(name="subtotal")
+
+	@Column(name = "subtotal")
 	public double getSubtotal() {
 		return subtotal;
 	}
@@ -63,8 +62,8 @@ public Trans (ArrayList<Item> lst) {
 	public void setSubtotal(double subtotal) {
 		this.subtotal = subtotal;
 	}
-	
-	@Column(name="total")
+
+	@Column(name = "total")
 	public double getTotal() {
 		return total;
 	}
@@ -72,8 +71,8 @@ public Trans (ArrayList<Item> lst) {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-	
-	@Column(name="hTaxTotal")
+
+	@Column(name = "hTaxTotal")
 	public double gethTaxTotal() {
 		return hTaxTotal;
 	}
@@ -81,8 +80,8 @@ public Trans (ArrayList<Item> lst) {
 	public void sethTaxTotal(double hTaxTotal) {
 		this.hTaxTotal = hTaxTotal;
 	}
-	
-	@Column(name="lTaxTotal")
+
+	@Column(name = "lTaxTotal")
 	public double getlTaxTotal() {
 		return lTaxTotal;
 	}
@@ -90,5 +89,24 @@ public Trans (ArrayList<Item> lst) {
 	public void setlTaxTotal(double lTaxTotal) {
 		this.lTaxTotal = lTaxTotal;
 	}
-	
+
+	public void deterHtaxTotal() {
+		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
+
+		for (Item i : items) {
+			i.deterTax();
+			hTaxTotal += i.gethTax();
+		}
+
+	}
+
+	public void deterLtaxTotal() {
+		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
+
+		for (Item i : items) {
+			i.deterTax();
+			lTaxTotal += i.getlTax();
+		}
+
+	}
 }

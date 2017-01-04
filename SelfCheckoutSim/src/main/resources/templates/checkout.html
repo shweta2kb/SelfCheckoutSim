@@ -6,7 +6,7 @@
 
 <form method="post">
 	<label> Current cart:
-		<select name="cart">
+		<select name="cartSelect">
   			<option th:each="item : ${cart}" th:text="${item.name}"></option> 
 		</select>
 	</label>
@@ -18,17 +18,12 @@
 </form>
 
 <br/>
-<h3>Current order: </h3>
+
+<h3>Current Order: </h3>
 <table>
-	<tr th:each="item : ${trans.lst}">
-		<td th:text="${item.name}"></td> 
-	<tr>
-		<td th:text="${trans.htotal}"></td>
-		<td th:text="${trans.ltotal}"></td>
-		<td  th:text="${trans.subtotal}"></td>
-	</tr>
-	<tr>
-		<td th:text="${trans.total}"></td>
+	<tr th:each="item : ${trans}">
+		<td th:text="${item.name}"></td>
+		<td th:text="${item.price}"></td>
 	</tr>
 </table>
 
