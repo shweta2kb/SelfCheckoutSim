@@ -11,13 +11,14 @@
 		<datalist id="shelf">
 			<option th:each="item : ${items}" th:text="${item.name}"></option>
 		</datalist>
-		<input type="submit" name="action" value="Add Item" /> <br></br> <label>Current
-			cart</label> <input list="cartSelect" name="cartSelect" />
+		<input type="submit" name="action" value="Add Item" /> 
+		<br></br> 
+		<label>Current cart</label> <input list="cartSelect" name="cartSelect" />
 		<datalist id="cartSelect">
 			<option th:each="item : ${cart}" th:text="${item.name}"></option>
 		</datalist>
-		<input type="submit" name="action" value="Remove Item" /> <input
-			type="submit" name="action" value="Checkout" />
+		<input type="submit" name="action" value="Remove Item" /> 
+		<input type="submit" name="action" value="Checkout" />
 	</form>
 </body>
 
