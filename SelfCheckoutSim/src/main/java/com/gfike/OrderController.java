@@ -29,7 +29,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
-	public String newOrder (HttpServletRequest request, Model model) {
+	public String newOrder (HttpServletRequest request, Model model, RedirectAttributes redirectAtt) {
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
 		
@@ -37,27 +37,34 @@ public class OrderController {
 		
 		if (action.equalsIgnoreCase("add item")) {
 			Item i = itemDao.findByName(request.getParameter("shelf"));
-			String cart = i.getPlu() + ",";
-			String msg = i.getName() + " was succesfully added to the cart";
+			if (i == null) {
+				String msg = "Please select an item from the list";
+				model.addAttribute("msg", msg);
+				return "newOrder";
+			}
+			//comma needs to be left off so first item can be found
+			ArrayList <Item> arr_cart = new ArrayList<Item>();
+			arr_cart.add(i);
+			String cart = StrConvert.ArrLstToString(arr_cart);
+			String msg = i.getName() +" was succesffuly added to the cart!";
+			redirectAtt.addAttribute("cart", cart);
+			redirectAtt.addAttribute("msg", msg);
 			return String.format("redirect:newOrder%s/%s", cart, msg);		
 		}
-		
 		
 		String msg = "Cart is empty!";
 		model.addAttribute("msg", msg);
 		return "newOrder";
 	}
 	
-	@RequestMapping(value="/newOrder{cart}/{msg}", method=RequestMethod.GET)
-	public String newOrder (@PathVariable String cart, @PathVariable String msg, Model model) {
-		
+	@RequestMapping(value = "/newOrder{cart}/{msg}", method = RequestMethod.GET)
+	public String newOrderwithCart (HttpServletRequest request, Model model, RedirectAttributes redirectAtt,
+			@PathVariable String cart, @PathVariable String msg) {
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
 		
-		ArrayList <Item> ArrCart = StrConvert.StrToArrLst(cart);
-		model.addAttribute("cart", ArrCart);
-		return "newOrder";
+		ArrayList<Item> arr_cart = StrConvert.StrToArrLst(cart);
+		model.addAttribute("cart", arr_cart);
+		return String.format("newOrder%s/%s", cart, msg);
 	}
-
-	
-	}
+}

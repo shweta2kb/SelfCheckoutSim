@@ -13,8 +13,9 @@ public StrConvert () {}
 	public static ArrayList<Item> StrToArrLst (String str) {
 		String arr [] = str.split(",");
 		ArrayList<Item> lst = new ArrayList<Item>();
-		for (String s: arr) {
-			lst.add(itemDao.findByPlu(s));
+		for (int i = 0; i < arr.length; i ++) {
+			Item j = itemDao.findByPlu(arr[i]);
+			lst.add(j);
 		}
 		return lst;
 	}
