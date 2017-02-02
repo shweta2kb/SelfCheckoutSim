@@ -23,6 +23,7 @@ public class OrderController {
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
 	public String newOrder (Model model) {
+		
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
 		return "newOrder";
@@ -30,26 +31,23 @@ public class OrderController {
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrder (HttpServletRequest request, Model model, RedirectAttributes redirectAtt) {
+		
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
 		
 		String action = request.getParameter("action");
 		
 		if (action.equalsIgnoreCase("add item")) {
-			Item i = itemDao.findByName(request.getParameter("shelf"));
-			if (i == null) {
-				String msg = "Please select an item from the list";
+			String plu = request.getParameter("shelf");
+			if (plu.isEmpty() || plu.equalsIgnoreCase("") || plu == "") {
+				String msg = "Please select an item to add to the cart";
 				model.addAttribute("msg", msg);
 				return "newOrder";
 			}
-			//comma needs to be left off so first item can be found
-			ArrayList <Item> arr_cart = new ArrayList<Item>();
-			arr_cart.add(i);
-			String cart = StrConvert.ArrLstToString(arr_cart);
-			String msg = i.getName() +" was succesffuly added to the cart!";
-			redirectAtt.addAttribute("cart", cart);
+			String msg = itemDao.findByPlu(plu) + " has been added to the cart";
+			
 			redirectAtt.addAttribute("msg", msg);
-			return String.format("redirect:newOrder%s/%s", cart, msg);		
+			return String.format("redirect:newOrder%s/%s", plu, msg);		
 		}
 		
 		String msg = "Cart is empty!";
@@ -57,14 +55,50 @@ public class OrderController {
 		return "newOrder";
 	}
 	
-	@RequestMapping(value = "/newOrder{cart}/{msg}", method = RequestMethod.GET)
-	public String newOrderwithCart (HttpServletRequest request, Model model, RedirectAttributes redirectAtt,
-			@PathVariable String cart, @PathVariable String msg) {
+	@RequestMapping(value = "/newOrder{plu}/{msg}", method = RequestMethod.GET)
+	public String newOrderWitem (Model model, @PathVariable String plu, @PathVariable String msg) {
+		
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
 		
-		ArrayList<Item> arr_cart = StrConvert.StrToArrLst(cart);
-		model.addAttribute("cart", arr_cart);
-		return String.format("newOrder%s/%s", cart, msg);
+
+		model.addAttribute("msg", msg);
+		model.addAttribute("cart", itemDao.findByPlu(plu));
+		
+		if (plu.length() > 11) {
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", StrConvert.StrToArrLst(plu));
+			return "newOrder";
+			}
+		
+		
+		return "newOrder";
 	}
-}
+	
+	
+	@RequestMapping(value = "/newOrder{plu}/{msg}", method = RequestMethod.POST)
+	public String newOrderWitem (Model model, @PathVariable String plu, @PathVariable String msg,
+			HttpServletRequest request,RedirectAttributes redirectAtt) {
+		
+		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
+		model.addAttribute("items", items);
+		
+		String action = request.getParameter("action");
+		
+		if (action.equalsIgnoreCase("add item") && plu.length() == 11) {
+			plu += "," + request.getParameter("shelf");
+			msg = itemDao.findByPlu(plu) + " has been added to the cart";
+			redirectAtt.addAttribute("plu", plu);
+			redirectAtt.addAttribute("msg", msg);
+			return String.format("redirect:newOrder%s/%s", plu, msg);
+		}
+		
+//		if (plu.length() > 11) {
+//			
+//		}
+		
+		return "newOrder";
+	}
+	
+	}
+

@@ -9,7 +9,7 @@
 		<label>Choose an item from the list to add to the cart or
 			start type the name in:</label> <input list="shelf" name="shelf" />
 		<datalist id="shelf">
-			<option th:each="item : ${items}" th:text="${item.name}"></option>
+			<option th:each="item : ${items}" th:text="${item.name}" th:value="${item.plu}"></option>
 		</datalist>
 		<input type="submit" name="action" value="Add Item" /> 
 		<br></br> 
