@@ -45,7 +45,7 @@ public class OrderController {
 				return "newOrder";
 			}
 			String msg = itemDao.findByPlu(plu) + " has been added to the cart";
-			
+			redirectAtt.addAttribute("plu", plu);
 			redirectAtt.addAttribute("msg", msg);
 			return String.format("redirect:newOrder%s/%s", plu, msg);		
 		}
@@ -60,18 +60,14 @@ public class OrderController {
 		
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
-		
-
 		model.addAttribute("msg", msg);
-		model.addAttribute("cart", itemDao.findByPlu(plu));
 		
-		if (plu.length() > 11) {
-			model.addAttribute("msg", msg);
+		if (plu.contains(",")) {
 			model.addAttribute("cart", StrConvert.StrToArrLst(plu));
 			return "newOrder";
-			}
+		}
 		
-		
+		model.addAttribute("cart", itemDao.findByPlu(plu));
 		return "newOrder";
 	}
 	
@@ -82,20 +78,22 @@ public class OrderController {
 		
 		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 		model.addAttribute("items", items);
+		model.addAttribute("msg", msg);
 		
 		String action = request.getParameter("action");
 		
-		if (action.equalsIgnoreCase("add item") && plu.length() == 11) {
-			plu += "," + request.getParameter("shelf");
-			msg = itemDao.findByPlu(plu) + " has been added to the cart";
+		if (action.equalsIgnoreCase("add item") && !plu.contains(",")) {
+			model.addAttribute("cart", itemDao.findByPlu(plu));
+			ArrayList<Item> arrCart = new ArrayList<Item> ();
+			arrCart.add(itemDao.findByPlu(plu));
+			arrCart.add(itemDao.findByPlu(request.getParameter("shelf")));
+			plu = StrConvert.ArrLstToString(arrCart);
+			msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " was successully added to the cart!";
 			redirectAtt.addAttribute("plu", plu);
 			redirectAtt.addAttribute("msg", msg);
-			return String.format("redirect:newOrder%s/%s", plu, msg);
+			return String.format("newOrder%s/%s", plu, msg);
+			
 		}
-		
-//		if (plu.length() > 11) {
-//			
-//		}
 		
 		return "newOrder";
 	}
