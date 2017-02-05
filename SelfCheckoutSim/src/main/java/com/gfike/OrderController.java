@@ -3,7 +3,10 @@ package com.gfike;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,17 +40,32 @@ public class OrderController {
 		
 		String action = request.getParameter("action");
 		
+		HttpSession session = request.getSession();
+		
 		if (action.equalsIgnoreCase("add item")) {
-			String plu = request.getParameter("shelf");
-			if (plu.isEmpty() || plu.equalsIgnoreCase("") || plu == "") {
+			ArrayList <Item> cart = new ArrayList <Item>();
+			cart.add(itemDao.findByPlu(request.getParameter("shelf")));
+			if (request.getParameter("shelf").isEmpty() || 
+					request.getParameter("shelf").equalsIgnoreCase("") 
+					|| request.getParameter("shelf") == "") {
 				String msg = "Please select an item to add to the cart";
 				model.addAttribute("msg", msg);
 				return "newOrder";
 			}
-			String msg = itemDao.findByPlu(plu) + " has been added to the cart";
-			redirectAtt.addAttribute("plu", plu);
-			redirectAtt.addAttribute("msg", msg);
-			return String.format("redirect:newOrder%s/%s", plu, msg);		
+			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been added to the cart";
+			model.addAttribute("msg", msg);
+			session.setAttribute("cart",cart);
+			model.addAttribute("cart", session.getAttribute("cart"));
+			return "newOrder";
+		}
+		
+		if((session.getAttribute("cart") != null || !session.getAttribute("cart").equals("")) 
+				&& action.equalsIgnoreCase("add item")) {
+			session.setAttribute("cart", itemDao.findByPlu(request.getParameter("shelf")));
+			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been added to the cart";
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", session.getAttribute("cart"));
+			return "newOrder";
 		}
 		
 		String msg = "Cart is empty!";
@@ -55,48 +73,6 @@ public class OrderController {
 		return "newOrder";
 	}
 	
-	@RequestMapping(value = "/newOrder{plu}/{msg}", method = RequestMethod.GET)
-	public String newOrderWitem (Model model, @PathVariable String plu, @PathVariable String msg) {
-		
-		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
-		model.addAttribute("items", items);
-		model.addAttribute("msg", msg);
-		
-		if (plu.contains(",")) {
-			model.addAttribute("cart", StrConvert.StrToArrLst(plu));
-			return "newOrder";
-		}
-		
-		model.addAttribute("cart", itemDao.findByPlu(plu));
-		return "newOrder";
-	}
-	
-	
-	@RequestMapping(value = "/newOrder{plu}/{msg}", method = RequestMethod.POST)
-	public String newOrderWitem (Model model, @PathVariable String plu, @PathVariable String msg,
-			HttpServletRequest request,RedirectAttributes redirectAtt) {
-		
-		ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
-		model.addAttribute("items", items);
-		model.addAttribute("msg", msg);
-		
-		String action = request.getParameter("action");
-		
-		if (action.equalsIgnoreCase("add item") && !plu.contains(",")) {
-			model.addAttribute("cart", itemDao.findByPlu(plu));
-			ArrayList<Item> arrCart = new ArrayList<Item> ();
-			arrCart.add(itemDao.findByPlu(plu));
-			arrCart.add(itemDao.findByPlu(request.getParameter("shelf")));
-			plu = StrConvert.ArrLstToString(arrCart);
-			msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " was successully added to the cart!";
-			redirectAtt.addAttribute("plu", plu);
-			redirectAtt.addAttribute("msg", msg);
-			return String.format("newOrder%s/%s", plu, msg);
-			
-		}
-		
-		return "newOrder";
-	}
 	
 	}
 
