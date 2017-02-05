@@ -42,7 +42,7 @@ public class OrderController {
 		
 		HttpSession session = request.getSession();
 		
-		if (action.equalsIgnoreCase("add item")) {
+		if (session.isNew() && action.equalsIgnoreCase("add item")) {
 			ArrayList <Item> cart = new ArrayList <Item>();
 			cart.add(itemDao.findByPlu(request.getParameter("shelf")));
 			if (request.getParameter("shelf").isEmpty() || 
@@ -59,11 +59,32 @@ public class OrderController {
 			return "newOrder";
 		}
 		
-		if((session.getAttribute("cart") != null || !session.getAttribute("cart").equals("")) 
-				&& action.equalsIgnoreCase("add item")) {
+		/*what doesn't work 
+		session.getAttribute("cart") != null
+		*/
+		
+		else if(!session.isNew() && action.equalsIgnoreCase("add item")) {
 			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart"); 
 			cart.add(itemDao.findByPlu(request.getParameter("shelf")));
 			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been added to the cart";
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", cart);
+			return "newOrder";
+		}
+		
+		else if(!session.isNew() && action.equalsIgnoreCase("remove item")) {
+			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart"); 
+			cart.remove(itemDao.findByPlu(request.getParameter("shelf")));
+			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been removed the cart";
+			model.addAttribute("msg", msg);
+			model.addAttribute("cart", cart);
+			return "newOrder";
+		}
+		
+		else if(!session.isNew() && action.equalsIgnoreCase("remove item")) {
+			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart"); 
+			cart.remove(itemDao.findByPlu(request.getParameter("shelf")));
+			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been removed the cart";
 			model.addAttribute("msg", msg);
 			model.addAttribute("cart", cart);
 			return "newOrder";
