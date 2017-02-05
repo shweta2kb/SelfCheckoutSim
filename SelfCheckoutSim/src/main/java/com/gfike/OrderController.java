@@ -61,10 +61,11 @@ public class OrderController {
 		
 		if((session.getAttribute("cart") != null || !session.getAttribute("cart").equals("")) 
 				&& action.equalsIgnoreCase("add item")) {
-			session.setAttribute("cart", itemDao.findByPlu(request.getParameter("shelf")));
+			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart"); 
+			cart.add(itemDao.findByPlu(request.getParameter("shelf")));
 			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been added to the cart";
 			model.addAttribute("msg", msg);
-			model.addAttribute("cart", session.getAttribute("cart"));
+			model.addAttribute("cart", cart);
 			return "newOrder";
 		}
 		
