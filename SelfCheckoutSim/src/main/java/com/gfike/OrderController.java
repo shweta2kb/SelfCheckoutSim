@@ -81,7 +81,7 @@ public class OrderController {
 			return "newOrder";
 		}
 		
-		else if(!session.isNew() && action.equalsIgnoreCase("remove item")) {
+		else if(!session.isNew() && action.equalsIgnoreCase("checkout")) {
 			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart"); 
 			cart.remove(itemDao.findByPlu(request.getParameter("shelf")));
 			String msg = itemDao.findByPlu(request.getParameter("shelf")).getName() + " has been removed the cart";
