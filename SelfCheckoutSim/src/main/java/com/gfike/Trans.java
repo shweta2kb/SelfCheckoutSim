@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "Trans")
 public class Trans {
-
+//TODO need to redo deterTax methods
 	private int uid;
 	private String lst;
 	private double subtotal;
@@ -48,11 +48,6 @@ public class Trans {
 		lst += i.getPlu() + ",";
 	}
 
-	public void removeItem(Item i) {
-		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
-		items.remove(i);
-		this.lst = StrConvert.ArrLstToString(items);
-	}
 
 	@Column(name = "subtotal")
 	public double getSubtotal() {
@@ -90,23 +85,4 @@ public class Trans {
 		this.lTaxTotal = lTaxTotal;
 	}
 
-	public void deterHtaxTotal() {
-		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
-
-		for (Item i : items) {
-			i.deterTax();
-			hTaxTotal += i.gethTax();
-		}
-
-	}
-
-	public void deterLtaxTotal() {
-		ArrayList<Item> items = StrConvert.StrToArrLst(this.lst);
-
-		for (Item i : items) {
-			i.deterTax();
-			lTaxTotal += i.getlTax();
-		}
-
-	}
 }
