@@ -34,6 +34,7 @@ public class NewOrderController {
 			session.setAttribute("items", items);
 			return "newOrder";
 		}
+		
 		ArrayList <Item> items = (ArrayList <Item>) session.getAttribute("items");
 		model.addAttribute("items", items);
 		
@@ -51,17 +52,65 @@ public class NewOrderController {
 		String action = request.getParameter("action");
 		String msg = "";
 		
-		if(session.getAttribute("cart") == null || session.getAttribute("cart") == "") {
-			
-			if (action.equalsIgnoreCase("add item")) {
-				ArrayList<Item> cart = new ArrayList<Item>();
-				session.setAttribute("cart", cart);
-				
-			}
+		if (session.getAttribute("items") == null || session.getAttribute("items") == "") {
+			ArrayList<Item> items =(ArrayList<Item>) itemDao.findAll();
+			model.addAttribute("items", items);
+			session.setAttribute("items", items);
 		}
+		
+		ArrayList <Item> items = (ArrayList <Item>) session.getAttribute("items");
+		model.addAttribute("items", items);
+		
+		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item")) {
+			if (!Tools.checkUserSelection(request, "shelf")) {
+				msg = "Please select an item from the list to add to the cart";
+				model.addAttribute("msg", msg);
+				return "newOrder";
+			}
+			ArrayList<Item> cart = new ArrayList<Item>();
+			Item i = itemDao.findByPlu("shelf");
+			cart.add(i);
+			session.setAttribute("cart", cart);
+			model.addAttribute("cart", cart);
+			msg = i.getName() + " has been added to the cart!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		
+		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item")) {
+			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
+			if (cart == null|| !Tools.checkUserSelection(request, "shelf")) {
+				msg = "Please select an item from the list to add to the cart";
+				model.addAttribute("msg", msg);
+				return "newOrder";
+			}
+			Item i = itemDao.findByPlu("shelf");
+			cart.add(i);
+			session.setAttribute("cart", cart);
+			model.addAttribute("cart", cart);
+			msg = i.getName() + " has been added to the cart!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("remove item")) {
+			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
+			if (cart.isEmpty() || !Tools.checkUserSelection(request, "cartSelect")) {
+				msg = "Cart is empty";
+				model.addAttribute("msg", msg);
+				return "newOrder";
+			}
+			Item i = itemDao.findByPlu("cartSelect");
+			cart.remove(i);
+			session.setAttribute("cart", cart);
+			model.addAttribute("cart", cart);
+			msg = i.getName() + " has been added to the cart!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		return "checkout";
 	}
-	
-	
-	
 	}
 

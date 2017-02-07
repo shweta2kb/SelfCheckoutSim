@@ -15,7 +15,7 @@
 		<br></br> 
 		<label>Current cart</label> <input list="cartSelect" name="cartSelect" />
 		<datalist id="cartSelect">
-			<option th:each="item : ${cart}" th:text="${item.name}"></option>
+			<option th:each="item : ${cart}" th:text="${item.name}" th:value="${item.plu}"></option>
 		</datalist>
 		<input type="submit" name="action" value="Remove Item" /> 
 		<input type="submit" name="action" value="Checkout" />
