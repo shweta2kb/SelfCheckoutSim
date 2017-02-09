@@ -41,6 +41,7 @@ public class NewOrderController {
 		if (session.getAttribute("cart") != null || session.getAttribute("cart") != "") {
 			ArrayList <Item> cart = (ArrayList<Item>) session.getAttribute("cart");
 			model.addAttribute("cart", cart);
+			return "newOrder";
 		}
 		return "newOrder";
 	}
@@ -53,64 +54,46 @@ public class NewOrderController {
 		String msg = "";
 		
 		if (session.getAttribute("items") == null || session.getAttribute("items") == "") {
-			ArrayList<Item> items =(ArrayList<Item>) itemDao.findAll();
+			ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 			model.addAttribute("items", items);
 			session.setAttribute("items", items);
+			return "newOrder";
 		}
 		
 		ArrayList <Item> items = (ArrayList <Item>) session.getAttribute("items");
 		model.addAttribute("items", items);
 		
-		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item")) {
-			if (!Tools.checkUserSelection(request, "shelf")) {
-				msg = "Please select an item from the list to add to the cart";
-				model.addAttribute("msg", msg);
-				return "newOrder";
-			}
-			ArrayList<Item> cart = new ArrayList<Item>();
-			Item i = itemDao.findByPlu("shelf");
+		
+		
+		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item") && Tools.checkUserSelection(request, "shelf")) {
+			ArrayList <Item> cart = new ArrayList <Item> ();
+			Item i = itemDao.findByPlu(request.getParameter("shelf"));
 			cart.add(i);
-			session.setAttribute("cart", cart);
 			model.addAttribute("cart", cart);
+			session.setAttribute("cart", cart);
 			msg = i.getName() + " has been added to the cart!";
 			model.addAttribute("msg", msg);
 			return "newOrder";
 		}
 		
-		
-		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item")) {
-			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
-			if (cart == null|| !Tools.checkUserSelection(request, "shelf")) {
-				msg = "Please select an item from the list to add to the cart";
-				model.addAttribute("msg", msg);
-				return "newOrder";
-			}
-			Item i = itemDao.findByPlu("shelf");
+		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item") && Tools.checkUserSelection(request, "shelf")) {
+			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
+			Item i = itemDao.findByPlu(request.getParameter("shelf"));
 			cart.add(i);
-			session.setAttribute("cart", cart);
 			model.addAttribute("cart", cart);
+			session.setAttribute("cart", cart);
 			msg = i.getName() + " has been added to the cart!";
 			model.addAttribute("msg", msg);
 			return "newOrder";
 		}
 		
-		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("remove item")) {
-			ArrayList<Item> cart = (ArrayList<Item>) session.getAttribute("cart");
-			if (cart.isEmpty() || !Tools.checkUserSelection(request, "cartSelect")) {
-				msg = "Cart is empty";
-				model.addAttribute("msg", msg);
-				return "newOrder";
-			}
-			Item i = itemDao.findByPlu("cartSelect");
-			cart.remove(i);
-			session.setAttribute("cart", cart);
-			model.addAttribute("cart", cart);
-			msg = i.getName() + " has been added to the cart!";
-			model.addAttribute("msg", msg);
-			return "newOrder";
+		else if (action.equalsIgnoreCase("add item") && !Tools.checkUserSelection(request, "shelf")) {
+			
 		}
 		
-		return "checkout";
+		return "newOrder";
 	}
 	}
+
+
 
