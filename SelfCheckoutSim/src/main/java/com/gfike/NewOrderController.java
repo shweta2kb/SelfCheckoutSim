@@ -32,17 +32,19 @@ public class NewOrderController {
 			ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 			model.addAttribute("items", items);
 			session.setAttribute("items", items);
-			return "newOrder";
 		}
 		
-		ArrayList <Item> items = (ArrayList <Item>) session.getAttribute("items");
-		model.addAttribute("items", items);
+		else {
+			ArrayList <Item> items = (ArrayList<Item>) session.getAttribute("items");
+			model.addAttribute("items", items);
+		}
 		
 		if (session.getAttribute("cart") != null || session.getAttribute("cart") != "") {
 			ArrayList <Item> cart = (ArrayList<Item>) session.getAttribute("cart");
 			model.addAttribute("cart", cart);
-			return "newOrder";
 		}
+		
+
 		return "newOrder";
 	}
 	
@@ -53,17 +55,23 @@ public class NewOrderController {
 		String action = request.getParameter("action");
 		String msg = "";
 		
+		//why does post need this?
 		if (session.getAttribute("items") == null || session.getAttribute("items") == "") {
 			ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 			model.addAttribute("items", items);
 			session.setAttribute("items", items);
-			return "newOrder";
 		}
 		
-		ArrayList <Item> items = (ArrayList <Item>) session.getAttribute("items");
-		model.addAttribute("items", items);
+		else {
+			ArrayList <Item> items = (ArrayList<Item>) session.getAttribute("items");
+			model.addAttribute("items", items);
+		}
 		
-		
+		//cleaner way?
+		if (session.getAttribute("cart") != null || session.getAttribute("cart") != "") {
+			ArrayList <Item> cart = (ArrayList<Item>) session.getAttribute("cart");
+			model.addAttribute("cart", cart);
+		}
 		
 		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item") && Tools.checkUserSelection(request, "shelf")) {
 			ArrayList <Item> cart = new ArrayList <Item> ();
@@ -88,7 +96,9 @@ public class NewOrderController {
 		}
 		
 		else if (action.equalsIgnoreCase("add item") && !Tools.checkUserSelection(request, "shelf")) {
-			
+			msg = "Selection is empty!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
 		}
 		
 		return "newOrder";
