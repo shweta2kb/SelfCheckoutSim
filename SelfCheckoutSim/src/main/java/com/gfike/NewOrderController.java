@@ -127,7 +127,9 @@ public class NewOrderController {
 		else if (action.equalsIgnoreCase("remove item") && Tools.checkUserSelection(request, "cartSelect")) {
 			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
 			Item i = itemDao.findByPlu("cartSelect");
-			msg = i.getName() + " has been removed!";
+			/* msg = i.getName() + " has been removed!";
+			 * doesn't work
+			 */
 			int r_index = cart.indexOf(i);
 			cart.remove(r_index + 1); //why does this need to happen?
 			model.addAttribute("cart", cart);
