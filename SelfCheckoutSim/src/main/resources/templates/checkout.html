@@ -7,7 +7,8 @@
 <form method="post">
 	<label> Current cart:
 		<select name="cartSelect">
-  			<option th:each="item : ${cart}" th:text="${item.name}"></option> 
+			<option></option>
+  			<option th:each="item : ${cart}" th:text="${item.name}" th:value="${item.plu}"></option> 
 		</select>
 	</label>
 	<input type="submit" name="action" value="Scan item"/>

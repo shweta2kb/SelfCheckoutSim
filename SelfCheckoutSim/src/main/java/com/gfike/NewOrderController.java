@@ -24,7 +24,7 @@ public class NewOrderController {
 
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.GET)
-	public String newOrder (Model model, HttpServletRequest request) {
+	public String newOrderGet (Model model, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		
@@ -49,7 +49,7 @@ public class NewOrderController {
 	}
 	
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
-	public String newOrder (HttpServletRequest request, Model model, RedirectAttributes redirectAtt) {
+	public String newOrderPost (HttpServletRequest request, Model model) {
 		
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
@@ -67,13 +67,17 @@ public class NewOrderController {
 			model.addAttribute("items", items);
 		}
 		
-		//cleaner way?
+		
 		if (session.getAttribute("cart") != null || session.getAttribute("cart") != "") {
 			ArrayList <Item> cart = (ArrayList<Item>) session.getAttribute("cart");
 			model.addAttribute("cart", cart);
 		}
 		
-		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item") && Tools.checkUserSelection(request, "shelf")) {
+		//cleaner way?
+		
+		//empty cart, user has selected add item, there is an item to add
+		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item") 
+				&& Tools.checkUserSelection(request, "shelf")) {
 			ArrayList <Item> cart = new ArrayList <Item> ();
 			Item i = itemDao.findByPlu(request.getParameter("shelf"));
 			cart.add(i);
@@ -84,7 +88,9 @@ public class NewOrderController {
 			return "newOrder";
 		}
 		
-		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item") && Tools.checkUserSelection(request, "shelf")) {
+		//not empty cart, user has selected add item, there is an item to add
+		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item") 
+				&& Tools.checkUserSelection(request, "shelf")) {
 			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
 			Item i = itemDao.findByPlu(request.getParameter("shelf"));
 			cart.add(i);
@@ -95,15 +101,60 @@ public class NewOrderController {
 			return "newOrder";
 		}
 		
+		//user has selected add item and there is no item to add
 		else if (action.equalsIgnoreCase("add item") && !Tools.checkUserSelection(request, "shelf")) {
 			msg = "Selection is empty!";
 			model.addAttribute("msg", msg);
 			return "newOrder";
 		}
 		
-		return "newOrder";
+		//empty cart, user has either selected remove item or checkout
+		else if ((action.equalsIgnoreCase("remove item") || action.equalsIgnoreCase("checkout")) 
+				&& (session.getAttribute("cart") == null || session.getAttribute("cart") == "") ){
+			msg = "Cart is empty!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		//user has selected remove item, selection is empty
+		else if (action.equalsIgnoreCase("remove item") && !Tools.checkUserSelection(request, "cartSelect")) {
+			msg = "Selection is empty!";
+			model.addAttribute("msg", msg);
+			return "newOrder";
+		}
+		
+		//user has selected remove item, selection is not empty
+		else if (action.equalsIgnoreCase("remove item") && Tools.checkUserSelection(request, "cartSelect")) {
+			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
+			Item i = itemDao.findByPlu("cartSelect");
+			msg = i.getName() + " has been removed!";
+			int r_index = cart.indexOf(i);
+			cart.remove(r_index + 1); //why does this need to happen?
+			model.addAttribute("cart", cart);
+			session.setAttribute("cart", cart);
+			//the following works
+			msg = "An item has been removed form the cart!";
+			model.addAttribute("msg", msg); 
+			
+			//i.getName() seems to be the problem
+			return "newOrder";
+		}
+		
+		return "checkout";
 	}
 	}
 
+//what doesn't work
+
+/*			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
+Item i = itemDao.findByPlu("cartSelect");
+msg = i.getName() + " has been removed!";
+cart.remove(i);
+model.addAttribute("msg", msg);
+model.addAttribute("cart", cart);
+session.removeAttribute("cart");
+session.setAttribute("cart", cart);
+return "newOrder";
+*/
 
 
