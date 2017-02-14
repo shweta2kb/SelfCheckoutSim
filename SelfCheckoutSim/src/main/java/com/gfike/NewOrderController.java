@@ -51,9 +51,12 @@ public class NewOrderController {
 	@RequestMapping(value="/newOrder", method=RequestMethod.POST)
 	public String newOrderPost (HttpServletRequest request, Model model) {
 		
+		
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
 		String msg = "";
+		
+		//TODO make it so when page is reloaded from checkout it clears the cart, or do we want that function to stay in place?
 		
 		//why does post need this?
 		if (session.getAttribute("items") == null || session.getAttribute("items") == "") {
@@ -126,37 +129,21 @@ public class NewOrderController {
 		//user has selected remove item, selection is not empty
 		else if (action.equalsIgnoreCase("remove item") && Tools.checkUserSelection(request, "cartSelect")) {
 			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
-			Item i = itemDao.findByPlu("cartSelect");
-			/* msg = i.getName() + " has been removed!";
-			 * doesn't work
-			 */
-			int r_index = cart.indexOf(i);
-			cart.remove(r_index + 1); //why does this need to happen?
+			Item i = itemDao.findByPlu(request.getParameter("cartSelect"));
+			msg = i.getName() + " has been removed!";
+			try {
+			cart.remove(i); }
+			catch (IndexOutOfBoundsException e) {
+				session.removeAttribute("cart");
+				msg = "Cart is empty!";
+				model.addAttribute("msg", msg);
+			}
 			model.addAttribute("cart", cart);
 			session.setAttribute("cart", cart);
-			//the following works
-			msg = "An item has been removed form the cart!";
 			model.addAttribute("msg", msg); 
-			
-			//i.getName() seems to be the problem
 			return "newOrder";
 		}
 		
 		return "checkout";
 	}
 	}
-
-//what doesn't work
-
-/*			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
-Item i = itemDao.findByPlu("cartSelect");
-msg = i.getName() + " has been removed!";
-cart.remove(i);
-model.addAttribute("msg", msg);
-model.addAttribute("cart", cart);
-session.removeAttribute("cart");
-session.setAttribute("cart", cart);
-return "newOrder";
-*/
-
-

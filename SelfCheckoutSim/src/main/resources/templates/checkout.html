@@ -5,18 +5,29 @@
 <body>
 
 <form method="post">
-	<label> Current cart:
+	<label>Items left in cart:
 		<select name="cartSelect">
-			<option></option>
   			<option th:each="item : ${cart}" th:text="${item.name}" th:value="${item.plu}"></option> 
 		</select>
+		<input type="submit" name="action" value="Scan item"/>
 	</label>
-	<input type="submit" name="action" value="Scan item"/>
-	<input type="submit" name="action" value="Bag item"/>
-	<input type="submit" name="action" value="Weigh item"/>
-	<br/>
-	<input type="submit" name="action" value="Pay now"/>
+	<label>
+		<select name ="actionSelect">
+			<option>Scan item/Weigh item</option>
+			<option>Bag item</option>
+		<option>Pay now</option>
+		</select>
+	</label>
 </form>
+
+<br/>
+
+Items bagged:
+<table>
+		<tbody>
+			<tr th:each = "item : ${bagged}" th:text = "${item.name}"></tr>
+		</tbody>
+</table>
 
 <br/>
 

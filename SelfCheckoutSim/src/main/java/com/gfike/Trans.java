@@ -14,11 +14,11 @@ import javax.validation.constraints.NotNull;
 public class Trans {
 //TODO need to redo deterTax methods
 	private int uid;
-	private String lst;
 	private double subtotal;
 	private double total;
 	private double hTaxTotal;
 	private double lTaxTotal;
+	private String items;
 
 	public Trans() {
 	}
@@ -34,20 +34,6 @@ public class Trans {
 	protected void setUid(int uid) {
 		this.uid = uid;
 	}
-
-	@Column(name = "Items")
-	public String getLst() {
-		return lst;
-	}
-
-	public void setLst(String lst) {
-		this.lst = lst;
-	}
-
-	public void addItem(Item i) {
-		lst += i.getPlu() + ",";
-	}
-
 
 	@Column(name = "subtotal")
 	public double getSubtotal() {
@@ -84,5 +70,23 @@ public class Trans {
 	public void setlTaxTotal(double lTaxTotal) {
 		this.lTaxTotal = lTaxTotal;
 	}
+	
+	@Column(name = "Item")
+	private String getItems() {
+		return items;
+	}
+
+	public void setItems(String items) {
+		this.items = items;
+	}
+	
+	public void saveItems (ArrayList<Item> lst) {
+		for(Item i : lst) {
+			items += "\n" + i.getPlu() + " " + i.getName();
+		}
+	}
+	
+	
+	
 
 }
