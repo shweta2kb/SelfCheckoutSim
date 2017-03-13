@@ -28,7 +28,7 @@ public class NewOrderController {
 		
 		HttpSession session = request.getSession();
 		
-		if (session.getAttribute("items") == null || session.getAttribute("items") == "") {
+		if (!Tools.checkSessionAtt(session, "item")) {
 			ArrayList<Item> items = (ArrayList<Item>) itemDao.findAll();
 			model.addAttribute("items", items);
 			session.setAttribute("items", items);
@@ -71,7 +71,7 @@ public class NewOrderController {
 		}
 		
 		
-		if (session.getAttribute("cart") != null || session.getAttribute("cart") != "") {
+		if (Tools.checkSessionAtt(session, "cart")) {
 			ArrayList <Item> cart = (ArrayList<Item>) session.getAttribute("cart");
 			model.addAttribute("cart", cart);
 		}
@@ -79,7 +79,7 @@ public class NewOrderController {
 		//cleaner way?
 		
 		//empty cart, user has selected add item, there is an item to add
-		if (session.getAttribute("cart") == null && action.equalsIgnoreCase("add item") 
+		if (!Tools.checkSessionAtt(session, "cart") && action.equalsIgnoreCase("add item") 
 				&& Tools.checkUserSelection(request, "shelf")) {
 			ArrayList <Item> cart = new ArrayList <Item> ();
 			Item i = itemDao.findByPlu(request.getParameter("shelf"));
@@ -92,7 +92,7 @@ public class NewOrderController {
 		}
 		
 		//not empty cart, user has selected add item, there is an item to add
-		else if (session.getAttribute("cart") != null && action.equalsIgnoreCase("add item") 
+		else if (Tools.checkSessionAtt(session, "cart") && action.equalsIgnoreCase("add item") 
 				&& Tools.checkUserSelection(request, "shelf")) {
 			ArrayList <Item> cart = (ArrayList <Item>) session.getAttribute("cart");
 			Item i = itemDao.findByPlu(request.getParameter("shelf"));
@@ -113,7 +113,7 @@ public class NewOrderController {
 		
 		//empty cart, user has either selected remove item or checkout
 		else if ((action.equalsIgnoreCase("remove item") || action.equalsIgnoreCase("checkout")) 
-				&& (session.getAttribute("cart") == null || session.getAttribute("cart") == "") ){
+				&& !Tools.checkSessionAtt(session, "cart") ){
 			msg = "Cart is empty!";
 			model.addAttribute("msg", msg);
 			return "newOrder";
