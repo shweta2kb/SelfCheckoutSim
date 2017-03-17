@@ -9,16 +9,15 @@
 		<select name="cartSelect">
   			<option th:each="item : ${cart}" th:text="${item.name}" th:value="${item.plu}"></option> 
 		</select>
-		<input type="submit" name="action" value="Scan item"/>
-	</label>
-	<label>
 		<select name ="actionSelect">
 			<option>Scan item/Weigh item</option>
 			<option>Bag item</option>
-		<option>Pay now</option>
+			<option>Pay now</option>
 		</select>
 	</label>
 </form>
+
+<input type="submit" name="action" value="Pay now" /> 
 
 <br/>
 
