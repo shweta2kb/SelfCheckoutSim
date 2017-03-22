@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "Trans")
 public class Trans {
-//TODO need to redo deterTax methods
+//TO-DO  item is scanned and weight is okay, what happens in the transaction
 	private int uid;
 	private double subtotal;
 	private double total;
@@ -86,7 +86,9 @@ public class Trans {
 		}
 	}
 	
-	
+	private String getStrFromLst (ArrayList<Item> lst) {
+		
+	}
 	
 
 }
