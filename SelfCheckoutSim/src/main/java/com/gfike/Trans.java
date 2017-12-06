@@ -87,7 +87,11 @@ public class Trans {
 	}
 	
 	private String getStrFromLst (ArrayList<Item> lst) {
-		
+		String str = "";
+		for(Item i : lst) {
+			str += i.getName();
+		}
+		return str;
 	}
 	
 
